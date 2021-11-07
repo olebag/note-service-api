@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/olebag/note-service-api/internal/utills"
+	"github.com/scipie28/note-service-api/internal/utills"
 )
 
 func main() {
