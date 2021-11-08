@@ -6,6 +6,7 @@ import (
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
+// 123
 func main() {
 
 	fmt.Println(utills.SplitSlice([]int32{
