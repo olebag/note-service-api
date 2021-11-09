@@ -2,9 +2,9 @@ package utills
 
 import (
 	"fmt"
-)
 
-import "github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/api"
+)
 
 var filter = []string{"a", "b", "c", "d"}
 
@@ -66,21 +66,22 @@ func FilterSlice(data []string) []string {
 	return res
 }
 
-func ConvertStructToMap(user []api.User) (map[uint64]api.User, error) {
+func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
 	res := make(map[uint64]api.User)
-	for _, v := range user {
-		res[uint64(v.UserId)] = v
+	for _, v := range users {
+		res[v.Id] = v
 	}
+
 	return res, nil
 }
 
-func SplitSlizeUsers(user []api.User, butchSize uint32) [][]api.User {
-	if uint32(len(user)) <= butchSize {
+func SplitSliceUsers(users []api.User, butchSize uint32) [][]api.User {
+	if uint32(len(users)) <= butchSize {
 		return [][]api.User{}
 	}
 
-	numBatches := uint32(len(user)) / butchSize
-	if uint32(len(user))%butchSize != 0 {
+	numBatches := uint32(len(users)) / butchSize
+	if uint32(len(users))%butchSize != 0 {
 		numBatches++
 	}
 
@@ -88,14 +89,15 @@ func SplitSlizeUsers(user []api.User, butchSize uint32) [][]api.User {
 
 	res := make([][]api.User, 0, numBatches)
 
-	for begin := 0; begin < len(user); {
+	for begin := uint32(0); begin < uint32(len(users)); {
 		end += butchSize
-		if end > uint32(len(user)) {
-			end = uint32(len(user))
+		if end > uint32(len(users)) {
+			end = uint32(len(users))
 		}
 
-		res = append(res, user[begin:end])
-		begin += int(butchSize)
+		res = append(res, users[begin:end])
+		begin += butchSize
 	}
+
 	return res
 }
