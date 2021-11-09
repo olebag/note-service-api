@@ -1,6 +1,10 @@
 package utills
 
-import "fmt"
+import (
+	"fmt"
+)
+
+import "github.com/scipie28/note-service-api/internal/app/api"
 
 var filter = []string{"a", "b", "c", "d"}
 
@@ -59,5 +63,39 @@ func FilterSlice(data []string) []string {
 		}
 	}
 
+	return res
+}
+
+func ConvertStructToMap(user []api.User) (map[uint64]api.User, error) {
+	res := make(map[uint64]api.User)
+	for _, v := range user {
+		res[uint64(v.UserId)] = v
+	}
+	return res, nil
+}
+
+func SplitSlizeUsers(user []api.User, butchSize uint32) [][]api.User {
+	if uint32(len(user)) <= butchSize {
+		return [][]api.User{}
+	}
+
+	numBatches := uint32(len(user)) / butchSize
+	if uint32(len(user))%butchSize != 0 {
+		numBatches++
+	}
+
+	var end uint32
+
+	res := make([][]api.User, 0, numBatches)
+
+	for begin := 0; begin < len(user); {
+		end += butchSize
+		if end > uint32(len(user)) {
+			end = uint32(len(user))
+		}
+
+		res = append(res, user[begin:end])
+		begin += int(butchSize)
+	}
 	return res
 }
