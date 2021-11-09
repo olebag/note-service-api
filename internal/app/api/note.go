@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// User
+// User...
 type User struct {
 	Id          uint64
 	UserId      uint32
