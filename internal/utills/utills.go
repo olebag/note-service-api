@@ -8,33 +8,6 @@ import (
 
 var filter = []string{"a", "b", "c", "d"}
 
-func SplitSlice(data []int32, batchSize int32) [][]int32 {
-	if int32(len(data)) <= batchSize {
-		return [][]int32{data}
-	}
-
-	numBatches := int32(len(data)) / batchSize
-	if int32(len(data))%batchSize != 0 {
-		numBatches++
-	}
-
-	var end int32
-
-	res := make([][]int32, 0, numBatches)
-
-	for begin := 0; begin < len(data); {
-		end += batchSize
-		if end > int32(len(data)) {
-			end = int32(len(data))
-		}
-
-		res = append(res, data[begin:end])
-		begin += int(batchSize)
-	}
-
-	return res
-}
-
 func SwapKeyAndValue(data map[int32]string) map[string]int32 {
 	res := make(map[string]int32)
 
@@ -75,7 +48,7 @@ func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
 	return res, nil
 }
 
-func SplitSliceUsers(users []api.User, butchSize uint32) [][]api.User {
+func SplitSlice(users []api.User, butchSize uint32) [][]api.User {
 	if uint32(len(users)) <= butchSize {
 		return [][]api.User{}
 	}

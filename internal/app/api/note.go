@@ -14,6 +14,6 @@ type User struct {
 
 func (u *User) String() {
 	fmt.Printf(
-		" Id = %v\n UserId = %v\n ClasssroomId = %v\n DocumentId = %v",
+		"Id = %v; UserId = %v; ClasssroomId = %v; DocumentId = %v\n",
 		u.Id, u.UserId, u.ClassroomId, u.DocumentId)
 }
