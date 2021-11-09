@@ -13,19 +13,22 @@ import (
 //}
 
 func OpenCloseFile(file string) {
-	data, err := os.Open(file)
-	if err != nil {
-		fmt.Println("Error", err)
-		return
-	}
-
-	fmt.Println(data.Name())
-	defer func(data *os.File) {
-		err := data.Close()
+	for i := 0; i < 5; i++ {
+		data, err := os.Open(file)
 		if err != nil {
 			fmt.Println("Error", err)
+			return
 		}
-	}(data)
+
+		fmt.Println(data.Name())
+		defer func(data *os.File) {
+			err := data.Close()
+			if err != nil {
+				fmt.Println("Error", err)
+			}
+		}(data)
+	}
+
 }
 
 type User struct {
