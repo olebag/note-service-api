@@ -11,21 +11,21 @@ import (
 func main() {
 	var err error
 
-	resFilter, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
+	filter, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
 	if err != nil {
 		fmt.Printf("error to start function FilterSlice %s", err)
 		return
 	}
 
-	fmt.Println(resFilter)
+	fmt.Println(filter)
 
-	resSwap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
+	swap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
 	if err != nil {
 		fmt.Printf("error to start function SwapKeyAndValue %s", err)
 		return
 	}
 
-	fmt.Println(resSwap)
+	fmt.Println(swap)
 
 	err = OpenCloseFile("cmd/note-service-api/text.txt")
 	if err != nil {
@@ -43,19 +43,19 @@ func main() {
 		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
 	}
 
-	resConvert, err := utills.ConvertSliceToMap(data)
+	convert, err := utills.ConvertSliceToMap(data)
 	if err != nil {
 		fmt.Printf("error to start function ConvertSliceToMap %s", err)
 	}
 
-	fmt.Println(resConvert)
+	fmt.Println(convert)
 
-	resSplit, err := utills.SplitSlice(data, 3)
+	split, err := utills.SplitSlice(data, 3)
 	if err != nil {
 		fmt.Printf("error to start function SplitSlice %s", err)
 	}
 
-	fmt.Println(resSplit)
+	fmt.Println(split)
 
 	for _, v := range data {
 		v.String()
