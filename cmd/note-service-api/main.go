@@ -9,24 +9,29 @@ import (
 )
 
 func main() {
-	val1, err1 := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
-	if err1 != nil {
-		fmt.Printf("error to start function FilterSlice %s", err1)
+	var err error
+
+	resFilter, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
+	if err != nil {
+		fmt.Printf("error to start function FilterSlice %s", err)
 		return
 	}
-	fmt.Println(val1)
 
-	val2, err2 := utills.SwapKeyAndValue(map[int32]string{1: "one"})
-	if err2 != nil {
-		fmt.Printf("error to start function SwapKeyAndValue %s", err2)
+	fmt.Println(resFilter)
+
+	resSwap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
+	if err != nil {
+		fmt.Printf("error to start function SwapKeyAndValue %s", err)
 		return
 	}
-	fmt.Println(val2)
 
-	err3 := OpenCloseFile("cmd/note-service-api/text.txt")
-	if err3 != nil {
-		fmt.Printf("OpenCloseFile() function execution error %s\n\n", err3)
+	fmt.Println(resSwap)
+
+	err = OpenCloseFile("cmd/note-service-api/text.txt")
+	if err != nil {
+		fmt.Printf("OpenCloseFile() function execution error %s\n\n", err)
 	}
+
 	fmt.Printf("OpenCloseFile() function comleted\n\n")
 
 	data := []api.User{
@@ -38,17 +43,19 @@ func main() {
 		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
 	}
 
-	val4, err4 := utills.ConvertSliceToMap(data)
-	if err4 != nil {
-		fmt.Printf("error to start function ConvertSliceToMap %s", err4)
+	resConvert, err := utills.ConvertSliceToMap(data)
+	if err != nil {
+		fmt.Printf("error to start function ConvertSliceToMap %s", err)
 	}
-	fmt.Println(val4)
 
-	val5, err5 := utills.SplitSlice(data, 3)
-	if err5 != nil {
-		fmt.Printf("error to start function SplitSlice %s", err5)
+	fmt.Println(resConvert)
+
+	resSplit, err := utills.SplitSlice(data, 3)
+	if err != nil {
+		fmt.Printf("error to start function SplitSlice %s", err)
 	}
-	fmt.Println(val5)
+
+	fmt.Println(resSplit)
 
 	for _, v := range data {
 		v.String()
