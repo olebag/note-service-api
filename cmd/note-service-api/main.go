@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	val1, err1 := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
 	if err1 != nil {
 		fmt.Printf("error to start function FilterSlice %s", err1)
@@ -57,28 +56,33 @@ func main() {
 	for _, v := range data {
 		v.String()
 	}
-
 }
 
 func OpenCloseFile(file string) error {
 	for i := 1; i < 5; i++ {
-		data, err := os.Open(file)
+		err := func() error {
+			data, err := os.Open(file)
 
-		func() {
 			defer func(data *os.File) {
 				err = data.Close()
 				if err != nil {
 					fmt.Printf("failed to closing file: %s", err)
 				}
-				fmt.Printf("Open the file %v times.\n", i)
+				fmt.Printf("Closed the file %v times.\n\n", i)
 			}(data)
+
+			if err != nil {
+				return err
+			}
+
+			fmt.Printf("Opened the file %v times. \n", i)
+
+			return nil
 		}()
 
 		if err != nil {
 			return err
 		}
-
-		fmt.Printf("Closed the file %v times. \n\n", i)
 	}
 
 	return nil
