@@ -67,7 +67,9 @@ func OpenCloseFile(file string) error {
 				err = data.Close()
 				if err != nil {
 					fmt.Printf("failed to closing file: %s", err)
+					return
 				}
+
 				fmt.Printf("Closed the file %v times.\n\n", i)
 			}(data)
 
