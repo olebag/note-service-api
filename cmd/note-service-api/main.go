@@ -10,13 +10,23 @@ import (
 
 func main() {
 
-	fmt.Println(utills.SwapKeyAndValue(map[int32]string{1: "one"}))
+	val1, err1 := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
+	if err1 != nil {
+		fmt.Printf("error to start function FilterSlice %s", err1)
+	} else {
+		fmt.Println(val1)
+	}
 
-	fmt.Println(utills.FilterSlice([]string{"d", "r", "t", "b", "a"}))
+	val2, err2 := utills.SwapKeyAndValue(map[int32]string{1: "one"})
+	if err2 != nil {
+		fmt.Printf("error to start function SwapKeyAndValue %s", err2)
+	} else {
+		fmt.Println(val2)
+	}
 
-	res := OpenCloseFile("cmd/note-service-api/text.txt")
-	if res != nil {
-		fmt.Printf("OpenCloseFile() function execution error %s\n\n", res)
+	err3 := OpenCloseFile("cmd/note-service-api/text.txt")
+	if err3 != nil {
+		fmt.Printf("OpenCloseFile() function execution error %s\n\n", err3)
 	} else {
 		fmt.Printf("OpenCloseFile() function comleted\n\n")
 	}
@@ -30,33 +40,45 @@ func main() {
 		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
 	}
 
-	fmt.Println(utills.ConvertSliceToMap(data))
+	val4, err4 := utills.ConvertSliceToMap(data)
+	if err4 != nil {
+		fmt.Printf("error to start function ConvertSliceToMap %s", err4)
+	} else {
+		fmt.Println(val4)
+	}
 
-	fmt.Println(utills.SplitSlice(data, 3))
+	val5, err5 := utills.SplitSlice(data, 3)
+	if err5 != nil {
+		fmt.Printf("error to start function SplitSlice %s", err5)
+	} else {
+		fmt.Println(val5)
+	}
 
-	data[0].String()
+	for _, v := range data {
+		v.String()
+	}
+
 }
 
 func OpenCloseFile(file string) error {
 	for i := 1; i < 5; i++ {
 		data, err := os.Open(file)
 
-		f := func() {
+		func() {
 			defer func(data *os.File) {
-				err := data.Close()
+				err = data.Close()
 				if err != nil {
-					fmt.Printf("Failed to closing file: %s", err)
+					fmt.Printf("failed to closing file: %s", err)
 				}
-				fmt.Printf("Закрыл файл в %v раз.\n\n", i)
+				fmt.Printf("Open the file %v times.\n", i)
 			}(data)
-		}
+		}()
 
 		if err != nil {
 			return err
 		}
 
-		fmt.Printf("Открыл файл в %v раз. \n", i)
-		f()
+		fmt.Printf("Closed the file %v times. \n\n", i)
 	}
 
 	return nil

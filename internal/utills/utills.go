@@ -8,7 +8,7 @@ import (
 
 var filter = []string{"a", "b", "c", "d"}
 
-func SwapKeyAndValue(data map[int32]string) map[string]int32 {
+func SwapKeyAndValue(data map[int32]string) (map[string]int32, error) {
 	res := make(map[string]int32)
 
 	for key, value := range data {
@@ -20,12 +20,13 @@ func SwapKeyAndValue(data map[int32]string) map[string]int32 {
 		res[value] = key
 	}
 
-	return res
+	return res, nil
 }
 
-func FilterSlice(data []string) []string {
+func FilterSlice(data []string) ([]string, error) {
 	dataMap := make(map[string]struct{})
 	var res []string
+
 	for _, val := range data {
 		dataMap[val] = struct{}{}
 	}
@@ -36,7 +37,7 @@ func FilterSlice(data []string) []string {
 		}
 	}
 
-	return res
+	return res, nil
 }
 
 func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
@@ -48,9 +49,9 @@ func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
 	return res, nil
 }
 
-func SplitSlice(users []api.User, butchSize uint32) [][]api.User {
+func SplitSlice(users []api.User, butchSize uint32) ([][]api.User, error) {
 	if uint32(len(users)) <= butchSize {
-		return [][]api.User{}
+		return [][]api.User{}, nil
 	}
 
 	numBatches := uint32(len(users)) / butchSize
@@ -72,5 +73,5 @@ func SplitSlice(users []api.User, butchSize uint32) [][]api.User {
 		begin += butchSize
 	}
 
-	return res
+	return res, nil
 }
