@@ -34,7 +34,7 @@ func main() {
 
 	fmt.Printf("OpenCloseFile() function comleted\n\n")
 
-	data := []api.User{
+	data := []api.Note{
 		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 		{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},

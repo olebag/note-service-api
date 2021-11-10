@@ -40,8 +40,8 @@ func FilterSlice(data []string) ([]string, error) {
 	return res, nil
 }
 
-func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
-	res := make(map[uint64]api.User)
+func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
+	res := make(map[uint64]api.Note)
 	for _, v := range users {
 		res[v.Id] = v
 	}
@@ -49,9 +49,9 @@ func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
 	return res, nil
 }
 
-func SplitSlice(users []api.User, butchSize uint32) ([][]api.User, error) {
+func SplitSlice(users []api.Note, butchSize uint32) ([][]api.Note, error) {
 	if uint32(len(users)) <= butchSize {
-		return [][]api.User{}, nil
+		return [][]api.Note{}, nil
 	}
 
 	numBatches := uint32(len(users)) / butchSize
@@ -61,7 +61,7 @@ func SplitSlice(users []api.User, butchSize uint32) ([][]api.User, error) {
 
 	var end uint32
 
-	res := make([][]api.User, 0, numBatches)
+	res := make([][]api.Note, 0, numBatches)
 
 	for begin := uint32(0); begin < uint32(len(users)); {
 		end += butchSize
