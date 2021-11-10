@@ -11,13 +11,13 @@ import (
 func main() {
 	var err error
 
-	filter, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
+	filteredSlice, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
 	if err != nil {
 		fmt.Printf("error to start function FilterSlice %s", err)
 		return
 	}
 
-	fmt.Println(filter)
+	fmt.Println(filteredSlice)
 
 	swap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
 	if err != nil {
