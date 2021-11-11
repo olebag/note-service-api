@@ -24,14 +24,14 @@ func TestSwapKeyAndValue(t *testing.T) {
 		require.Equal(t, expected, actual)
 	})
 
-	t.Run("Correct filled", func(t *testing.T) {
+	t.Run("correct filled", func(t *testing.T) {
 		actual, _ := SwapKeyAndValue(map[int32]string{1: "one", 2: "two"})
 		realRes := map[string]int32{"one": 1, "two": 2}
 
 		require.Equal(t, realRes, actual)
 	})
 
-	t.Run("Identical keys", func(t *testing.T) {
+	t.Run("identical keys", func(t *testing.T) {
 		actual, _ := SwapKeyAndValue(map[int32]string{1: "one", 2: "two", 3: "one"})
 		expected := map[string]int32{"one": 1, "two": 2}
 
@@ -102,7 +102,7 @@ func TestConvertSliceToMap(t *testing.T) {
 		require.Equal(t, expected, actual)
 	})
 
-	t.Run("Correct filled", func(t *testing.T) {
+	t.Run("correct filled", func(t *testing.T) {
 		data := []api.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -138,7 +138,7 @@ func TestSplitSlice(t *testing.T) {
 		require.Equal(t, expected, actual)
 	})
 
-	t.Run("Correct filled", func(t *testing.T) {
+	t.Run("correct filled", func(t *testing.T) {
 		data := []api.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -159,7 +159,7 @@ func TestSplitSlice(t *testing.T) {
 			require.Equal(t, expected, actual)
 		})
 
-		t.Run("len(data)%butchSize=0", func(t *testing.T) {
+		t.Run("len(data) % butchSize = 0", func(t *testing.T) {
 			expected := [][]api.Note{
 				{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 					{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7}},
@@ -172,7 +172,7 @@ func TestSplitSlice(t *testing.T) {
 			require.Equal(t, expected, actual)
 		})
 
-		t.Run("len(data)%butchSize!=0", func(t *testing.T) {
+		t.Run("len(data) % butchSize != 0", func(t *testing.T) {
 			expected := [][]api.Note{
 				{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 					{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -180,7 +180,7 @@ func TestSplitSlice(t *testing.T) {
 				{{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
 			}
 
-			actual, _ := SplitSlice(data, 2)
+			actual, _ := SplitSlice(data, 3)
 
 			require.Equal(t, expected, actual)
 		})
