@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/scipie28/note-service-api/internal/app/api"
 	"github.com/scipie28/note-service-api/internal/flusher"
 	"github.com/scipie28/note-service-api/internal/repo"
 	"github.com/scipie28/note-service-api/internal/utills"
-	"os"
 )
 
 func main() {
@@ -21,10 +22,10 @@ func main() {
 		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
 	}
 
-	eczemplRepo := repo.New(0)
-	eczemplFlush := flusher.New(eczemplRepo)
-	flush, err := eczemplFlush.Flush(dataMock, 2)
+	noteRepo := repo.New(0)
+	noteFlusher := flusher.New(noteRepo)
 
+	flush, err := noteFlusher.Flush(dataMock, 2)
 	if err != nil {
 		fmt.Println("Программа внезапно прервалась", err)
 		fmt.Println("Не успел передать:", flush)
@@ -34,7 +35,7 @@ func main() {
 
 	filteredSlice, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
 	if err != nil {
-		fmt.Printf("error to start function FilterSlice %s", err)
+		fmt.Printf("failed to filtering slice: %s", err)
 		return
 	}
 
