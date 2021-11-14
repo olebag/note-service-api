@@ -1,35 +1,43 @@
 package flusher
 
 import (
-	"errors"
-	"fmt"
+	"log"
+
 	"github.com/scipie28/note-service-api/internal/app/api"
 	"github.com/scipie28/note-service-api/internal/repo"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
 type Flusher interface {
-	Flush(note []api.Note, butch uint32) ([][]api.Note, error)
+	Flush(note []api.Note, butchSize uint32) ([]api.Note, error)
 }
 
 type flusher struct {
-	addData repo.Repo
+	repo repo.Repo
 }
 
-func New(data repo.Repo) Flusher {
-	return &flusher{data}
+func New(repo repo.Repo) Flusher {
+	return &flusher{repo}
 }
 
-func (f *flusher) Flush(data []api.Note, butchSize uint32) ([][]api.Note, error) {
-	chanks, _ := utills.SplitSlice(data, butchSize)
-	for i := 0; i < len(chanks); i++ {
-		err := f.addData.Add(chanks[i])
+func (f *flusher) Flush(notes []api.Note, batchSize uint32) ([]api.Note, error) {
+	batchs, err := utills.SplitSlice(notes, batchSize)
+	if err != nil {
+		return nil, err
+	}
 
+	for i, batch := range batchs {
+		num, err := f.repo.MultiAdd(batch)
 		if err != nil {
-			fmt.Println(err)
-			save := chanks[i:]
-			return save, errors.New("transmission was cut off")
+			save, err2 := utills.TwoToOneDimensionalSlice(batchs[i:])
+
+			if err2 != nil {
+				return nil, err2
+			}
+
+			return save, err
 		}
+		log.Printf("%d notes added", num)
 	}
 
 	return nil, nil

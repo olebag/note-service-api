@@ -51,8 +51,14 @@ func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
 }
 
 func SplitSlice(notes []api.Note, butchSize uint32) ([][]api.Note, error) {
-	if uint32(len(notes)) <= butchSize || butchSize <= 0 {
-		return nil, errors.New("ErrorInputValues")
+	if butchSize <= 0 || notes == nil {
+		return nil, errors.New("error input values")
+	}
+
+	if uint32(len(notes)) <= butchSize {
+		res := make([][]api.Note, 0)
+		res = append(res, notes)
+		return res, nil
 	}
 
 	numBatches := uint32(len(notes)) / butchSize
@@ -74,5 +80,16 @@ func SplitSlice(notes []api.Note, butchSize uint32) ([][]api.Note, error) {
 		begin += butchSize
 	}
 
+	return res, nil
+}
+
+func TwoToOneDimensionalSlice(data [][]api.Note) ([]api.Note, error) {
+	var res []api.Note
+	if len(data) <= 0 {
+		return nil, errors.New("error input values")
+	}
+	for _, val := range data {
+		res = append(res, val...)
+	}
 	return res, nil
 }
