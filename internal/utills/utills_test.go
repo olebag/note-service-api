@@ -256,12 +256,12 @@ func TestTwoToOneDimensionalSlice(t *testing.T) {
 
 	t.Run("input value equal zero", func(t *testing.T) {
 		req := make([][]api.Note, 0)
-		res, err := TwoToOneDimensionalSlice(req)
+		_, err := TwoToOneDimensionalSlice(req)
 
-		expectedRes := make([][]api.Note, 0)
+		expectedRes := "error input values"
 
-		require.Nil(t, err)
-		require.Equal(t, expectedRes, res)
+		require.Error(t, err)
+		require.Equal(t, expectedRes, err.Error())
 	})
 
 	t.Run("input slice with one value", func(t *testing.T) {
