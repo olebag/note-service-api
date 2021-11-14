@@ -12,8 +12,8 @@ type Note struct {
 	DocumentId  uint32
 }
 
-func (u *Note) String() {
+func (n *Note) String() {
 	fmt.Printf(
 		"Id = %v; UserId = %v; ClasssroomId = %v; DocumentId = %v\n",
-		u.Id, u.UserId, u.ClassroomId, u.DocumentId)
+		n.Id, n.UserId, n.ClassroomId, n.DocumentId)
 }

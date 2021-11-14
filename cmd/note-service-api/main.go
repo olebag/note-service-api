@@ -2,14 +2,35 @@ package main
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/flusher"
+	"github.com/scipie28/note-service-api/internal/repo"
 	"github.com/scipie28/note-service-api/internal/utills"
+	"os"
 )
 
 func main() {
 	var err error
+
+	dataMock := []api.Note{
+		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
+		{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
+		{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
+		{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
+		{Id: 5, UserId: 5, ClassroomId: 23, DocumentId: 6},
+		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
+	}
+
+	eczemplRepo := repo.New(0)
+	eczemplFlush := flusher.New(eczemplRepo)
+	flush, err := eczemplFlush.Flush(dataMock, 2)
+
+	if err != nil {
+		fmt.Println("Программа внезапно прервалась", err)
+		fmt.Println("Не успел передать:", flush)
+
+		return
+	}
 
 	filteredSlice, err := utills.FilterSlice([]string{"d", "r", "t", "b", "a"})
 	if err != nil {
@@ -19,6 +40,7 @@ func main() {
 
 	fmt.Println(filteredSlice)
 
+	//---------------------------
 	swappedMap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
 	if err != nil {
 		fmt.Printf("error to start function SwapKeyAndValue %s", err)
@@ -50,7 +72,7 @@ func main() {
 
 	fmt.Println(dataMap)
 
-	splitSlice, err := utills.SplitSlice(data, 3)
+	splitSlice, err := utills.SplitSlice(data, 5)
 	if err != nil {
 		fmt.Printf("error to start function SplitSlice %s", err)
 	}

@@ -1,6 +1,7 @@
 package utills
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/scipie28/note-service-api/internal/app/api"
@@ -49,13 +50,13 @@ func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
 	return res, nil
 }
 
-func SplitSlice(users []api.Note, butchSize uint32) ([][]api.Note, error) {
-	if uint32(len(users)) <= butchSize {
-		return [][]api.Note{}, nil
+func SplitSlice(notes []api.Note, butchSize uint32) ([][]api.Note, error) {
+	if uint32(len(notes)) <= butchSize || butchSize <= 0 {
+		return nil, errors.New("ErrorInputValues")
 	}
 
-	numBatches := uint32(len(users)) / butchSize
-	if uint32(len(users))%butchSize != 0 {
+	numBatches := uint32(len(notes)) / butchSize
+	if uint32(len(notes))%butchSize != 0 {
 		numBatches++
 	}
 
@@ -63,13 +64,13 @@ func SplitSlice(users []api.Note, butchSize uint32) ([][]api.Note, error) {
 
 	res := make([][]api.Note, 0, numBatches)
 
-	for begin := uint32(0); begin < uint32(len(users)); {
+	for begin := uint32(0); begin < uint32(len(notes)); {
 		end += butchSize
-		if end > uint32(len(users)) {
-			end = uint32(len(users))
+		if end > uint32(len(notes)) {
+			end = uint32(len(notes))
 		}
 
-		res = append(res, users[begin:end])
+		res = append(res, notes[begin:end])
 		begin += butchSize
 	}
 

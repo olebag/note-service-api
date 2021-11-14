@@ -1,6 +1,7 @@
 package utills
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/scipie28/note-service-api/internal/app/api"
@@ -8,102 +9,132 @@ import (
 )
 
 func TestSwapKeyAndValue(t *testing.T) {
-	t.Run("nil", func(t *testing.T) {
-		actual, _ := SwapKeyAndValue(make(map[int32]string))
+	t.Run("input value to nil", func(t *testing.T) {
+		output, err := SwapKeyAndValue(nil)
 		expected := make(map[string]int32)
-
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("zeroValue", func(t *testing.T) {
-		data := make(map[int32]string)
-		actual, _ := SwapKeyAndValue(data)
+	t.Run("input map to zero value", func(t *testing.T) {
+		input := make(map[int32]string)
+		output, err := SwapKeyAndValue(input)
 
 		expected := map[string]int32{}
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("correct filled", func(t *testing.T) {
-		actual, _ := SwapKeyAndValue(map[int32]string{1: "one", 2: "two"})
-		realRes := map[string]int32{"one": 1, "two": 2}
+	t.Run("values match the condition", func(t *testing.T) {
+		input := map[int32]string{1: "one", 2: "two"}
+		output, err := SwapKeyAndValue(input)
 
-		require.Equal(t, realRes, actual)
+		expected := map[string]int32{"one": 1, "two": 2}
+
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
 	t.Run("identical keys", func(t *testing.T) {
-		actual, _ := SwapKeyAndValue(map[int32]string{1: "one", 2: "two", 3: "one"})
+		input := map[int32]string{1: "one", 2: "two", 3: "one", 4: "two"}
+		output, err := SwapKeyAndValue(input)
 		expected := map[string]int32{"one": 1, "two": 2}
 
-		require.Equal(t, expected, actual)
+		actual := equalMap(output, expected)
+
+		require.Nil(t, err)
+		require.Equal(t, true, actual)
 	})
 }
 
+func equalMap(output map[string]int32, expected map[string]int32) bool {
+	if len(expected) != len(output) {
+		return false
+	}
+
+	for key := range output {
+		if _, found := expected[key]; !found {
+
+			return false
+		}
+	}
+
+	return true
+}
+
 func TestFilterSlice(t *testing.T) {
-	t.Run("nil", func(t *testing.T) {
-		var a []string
+	t.Run("input to nil value", func(t *testing.T) {
 		var expected []string
 
-		actual, _ := FilterSlice(a)
+		output, err := FilterSlice(nil)
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("zeroValue", func(t *testing.T) {
+	t.Run("input slice to zero values", func(t *testing.T) {
 		var expected []string
+		input := []string{""}
 
-		actual, _ := FilterSlice([]string{""})
+		output, err := FilterSlice(input)
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("not needed value", func(t *testing.T) {
+	t.Run("not values conforming for filter", func(t *testing.T) {
 		var expected []string
+		input := []string{"r", "t", "z", "1"}
+		output, err := FilterSlice(input)
 
-		actual, _ := FilterSlice([]string{"r", "t", "z", "1"})
-
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("correct filled", func(t *testing.T) {
-		var expected = []string{"a", "d"}
+	t.Run("values match the condition", func(t *testing.T) {
+		input := []string{"a", "t", "d", "1"}
+		expected := []string{"a", "d"}
 
-		res, _ := FilterSlice([]string{"a", "t", "d", "1"})
+		output, err := FilterSlice(input)
 
-		require.Equal(t, expected, res)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("only needed value", func(t *testing.T) {
-		var expected = []string{"a", "b", "c", "d"}
+	t.Run("only matching values for filter", func(t *testing.T) {
+		expected := []string{"a", "b", "c", "d"}
+		input := []string{"a", "b", "c", "d"}
+		output, err := FilterSlice(input)
 
-		actual, _ := FilterSlice([]string{"a", "b", "c", "d"})
-
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 }
 
 func TestConvertSliceToMap(t *testing.T) {
 
-	t.Run("nil", func(t *testing.T) {
-		var data []api.Note
-		var expected = map[uint64]api.Note{}
+	t.Run("input to nil value", func(t *testing.T) {
+		expected := map[uint64]api.Note{}
 
-		actual, _ := ConvertSliceToMap(data)
+		output, err := ConvertSliceToMap(nil)
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("zeroValue", func(t *testing.T) {
-		var expected = map[uint64]api.Note{}
-		data := make([]api.Note, 0)
+	t.Run("input map to zero values", func(t *testing.T) {
+		expected := map[uint64]api.Note{}
+		input := make([]api.Note, 0)
 
-		actual, _ := ConvertSliceToMap(data)
+		output, err := ConvertSliceToMap(input)
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 
-	t.Run("correct filled", func(t *testing.T) {
-		data := []api.Note{
+	t.Run("values match the condition", func(t *testing.T) {
+		input := []api.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
@@ -113,40 +144,45 @@ func TestConvertSliceToMap(t *testing.T) {
 			2: {Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
 
-		actual, _ := ConvertSliceToMap(data)
+		output, err := ConvertSliceToMap(input)
 
-		require.Equal(t, expected, actual)
+		require.Nil(t, err)
+		require.Equal(t, expected, output)
 	})
 }
 
 func TestSplitSlice(t *testing.T) {
-	t.Run("nil", func(t *testing.T) {
-		var data []api.Note
-		expected := make([][]api.Note, 0)
+	t.Run("input to nil value", func(t *testing.T) {
+		var expectedValue [][]api.Note
+		expectedError := errors.New("ErrorInputValues")
+		output, err := SplitSlice(nil, 1)
 
-		actual, _ := SplitSlice(data, 5)
-
-		require.Equal(t, expected, actual)
+		require.NotNil(t, err)
+		require.Equal(t, expectedError, err)
+		require.Equal(t, expectedValue, output)
 	})
 
-	t.Run("zeroValue", func(t *testing.T) {
-		expected := make([][]api.Note, 0)
-		data := make([]api.Note, 0)
+	t.Run("input map to zero values", func(t *testing.T) {
+		var expectedValue [][]api.Note
+		expectedError := errors.New("ErrorInputValues")
+		input := make([]api.Note, 0)
 
-		actual, _ := SplitSlice(data, 1)
+		output, err := SplitSlice(input, 0)
 
-		require.Equal(t, expected, actual)
+		require.NotNil(t, err)
+		require.Equal(t, expectedError, err)
+		require.Equal(t, expectedValue, output)
 	})
 
-	t.Run("correct filled", func(t *testing.T) {
-		data := []api.Note{
+	t.Run("input values match the condition", func(t *testing.T) {
+		input := []api.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 			{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
 			{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
 		}
 
-		t.Run("butchSize=1", func(t *testing.T) {
+		t.Run("map with butch size equal to 1", func(t *testing.T) {
 			expected := [][]api.Note{
 				{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6}},
 				{{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7}},
@@ -154,12 +190,13 @@ func TestSplitSlice(t *testing.T) {
 				{{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
 			}
 
-			actual, _ := SplitSlice(data, 1)
+			output, err := SplitSlice(input, 1)
 
-			require.Equal(t, expected, actual)
+			require.Nil(t, err)
+			require.Equal(t, expected, output)
 		})
 
-		t.Run("len(data) % butchSize = 0", func(t *testing.T) {
+		t.Run("the number value is a multiple of butch size", func(t *testing.T) {
 			expected := [][]api.Note{
 				{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 					{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7}},
@@ -167,12 +204,13 @@ func TestSplitSlice(t *testing.T) {
 					{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
 			}
 
-			actual, _ := SplitSlice(data, 2)
+			output, err := SplitSlice(input, 2)
 
-			require.Equal(t, expected, actual)
+			require.Nil(t, err)
+			require.Equal(t, expected, output)
 		})
 
-		t.Run("len(data) % butchSize != 0", func(t *testing.T) {
+		t.Run("the number value is not a multiple of butch size", func(t *testing.T) {
 			expected := [][]api.Note{
 				{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 					{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -180,9 +218,32 @@ func TestSplitSlice(t *testing.T) {
 				{{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
 			}
 
-			actual, _ := SplitSlice(data, 3)
+			actual, err := SplitSlice(input, 3)
 
+			require.Nil(t, err)
 			require.Equal(t, expected, actual)
+		})
+
+		t.Run("numeric value is larger than the batch size", func(t *testing.T) {
+			var expectedValue [][]api.Note
+			expectedError := errors.New("ErrorInputValues")
+
+			output, err := SplitSlice(input, 6)
+
+			require.NotNil(t, err)
+			require.Equal(t, expectedError, err)
+			require.Equal(t, expectedValue, output)
+		})
+
+		t.Run("butch size less or equal to zero", func(t *testing.T) {
+			var expectedValue [][]api.Note
+			expectedError := errors.New("ErrorInputValues")
+
+			output, err := SplitSlice(input, 0)
+
+			require.NotNil(t, err)
+			require.Equal(t, expectedError, err)
+			require.Equal(t, expectedValue, output)
 		})
 	})
 }
