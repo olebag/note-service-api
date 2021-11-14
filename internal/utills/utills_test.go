@@ -247,7 +247,7 @@ func TestSplitSlice(t *testing.T) {
 
 func TestTwoToOneDimensionalSlice(t *testing.T) {
 	t.Run("input value equal nil", func(t *testing.T) {
-		expectedError := "ErrorInputValues"
+		expectedError := "error input values"
 		_, err := TwoToOneDimensionalSlice(nil)
 
 		require.Error(t, err)
