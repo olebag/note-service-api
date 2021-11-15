@@ -45,7 +45,7 @@ func TestSwapKeyAndValue(t *testing.T) {
 	})
 }
 
-func equalMap(output map[string]int64, expected map[string]int64) bool {
+func equalMap(output, expected map[string]int64) bool {
 	if len(expected) != len(output) {
 		return false
 	}
