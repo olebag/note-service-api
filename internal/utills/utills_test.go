@@ -183,10 +183,14 @@ func TestSplitSlice(t *testing.T) {
 
 	t.Run("the number value is a multiple of batch size", func(t *testing.T) {
 		expectedRes := [][]api.Note{
-			{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
-				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7}},
-			{{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
-				{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
+			{
+				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
+				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
+			},
+			{
+				{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
+				{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
+			},
 		}
 
 		res, err := SplitSlice(req, 2)
@@ -196,10 +200,14 @@ func TestSplitSlice(t *testing.T) {
 
 	t.Run("the number value is not a multiple of batch size", func(t *testing.T) {
 		expectedRes := [][]api.Note{
-			{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
+			{
+				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
-				{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6}},
-			{{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
+				{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
+			},
+			{
+				{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
+			},
 		}
 
 		res, err := SplitSlice(req, 3)
@@ -209,10 +217,12 @@ func TestSplitSlice(t *testing.T) {
 
 	t.Run("numeric value is larger than the batch size", func(t *testing.T) {
 		expectedRes := [][]api.Note{
-			{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
+			{
+				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 				{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
-				{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7}},
+				{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
+			},
 		}
 
 		res, err := SplitSlice(req, 6)

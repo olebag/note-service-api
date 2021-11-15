@@ -48,7 +48,13 @@ func TestFlusher_Flush(t *testing.T) {
 		)
 
 		req := []api.Note{
-			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}
+			{
+				Id:          1,
+				UserId:      2,
+				ClassroomId: 3,
+				DocumentId:  4,
+			},
+		}
 		var expectedRes []api.Note
 
 		res, err := noteFlusher.Flush(req, 1)
