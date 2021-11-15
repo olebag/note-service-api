@@ -1,6 +1,7 @@
 package utills
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/scipie28/note-service-api/internal/app/api"
@@ -8,8 +9,8 @@ import (
 
 var filter = []string{"a", "b", "c", "d"}
 
-func SwapKeyAndValue(data map[int32]string) (map[string]int32, error) {
-	res := make(map[string]int32)
+func SwapKeyAndValue(data map[int64]string) (map[string]int64, error) {
+	res := make(map[string]int64)
 
 	for key, value := range data {
 		if _, found := res[value]; found {
@@ -40,8 +41,8 @@ func FilterSlice(data []string) ([]string, error) {
 	return res, nil
 }
 
-func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
-	res := make(map[uint64]api.User)
+func ConvertSliceToMap(users []api.Note) (map[int64]api.Note, error) {
+	res := make(map[int64]api.Note)
 	for _, v := range users {
 		res[v.Id] = v
 	}
@@ -49,28 +50,32 @@ func ConvertSliceToMap(users []api.User) (map[uint64]api.User, error) {
 	return res, nil
 }
 
-func SplitSlice(users []api.User, butchSize uint32) ([][]api.User, error) {
-	if uint32(len(users)) <= butchSize {
-		return [][]api.User{}, nil
+func SplitSlice(notes []api.Note, batchSize int64) ([][]api.Note, error) {
+	if batchSize <= 0 || notes == nil {
+		return nil, errors.New("error input values")
 	}
 
-	numBatches := uint32(len(users)) / butchSize
-	if uint32(len(users))%butchSize != 0 {
+	if int64(len(notes)) <= batchSize {
+		return [][]api.Note{notes}, nil
+	}
+
+	numBatches := int64(len(notes)) / batchSize
+	if int64(len(notes))%batchSize != 0 {
 		numBatches++
 	}
 
-	var end uint32
+	var end int64
 
-	res := make([][]api.User, 0, numBatches)
+	res := make([][]api.Note, 0, numBatches)
 
-	for begin := uint32(0); begin < uint32(len(users)); {
-		end += butchSize
-		if end > uint32(len(users)) {
-			end = uint32(len(users))
+	for begin := int64(0); begin < int64(len(notes)); {
+		end += batchSize
+		if end > int64(len(notes)) {
+			end = int64(len(notes))
 		}
 
-		res = append(res, users[begin:end])
-		begin += butchSize
+		res = append(res, notes[begin:end])
+		begin += batchSize
 	}
 
 	return res, nil
