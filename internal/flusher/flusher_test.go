@@ -36,8 +36,7 @@ func TestFlusher_Flush(t *testing.T) {
 	})
 
 	t.Run("input one note", func(t *testing.T) {
-		gomock.InOrder()
-		mockNoteRepo.EXPECT().MultiAdd([]api.Note{
+		gomock.InOrder(mockNoteRepo.EXPECT().MultiAdd([]api.Note{
 			{
 				Id:          1,
 				UserId:      2,
@@ -45,7 +44,8 @@ func TestFlusher_Flush(t *testing.T) {
 				DocumentId:  4,
 			},
 		},
-		).Return(int64(0), nil).Times(1)
+		).Return(int64(0), nil).Times(1),
+		)
 
 		req := []api.Note{
 			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}
@@ -83,7 +83,8 @@ func TestFlusher_Flush(t *testing.T) {
 				Id:          1,
 				UserId:      2,
 				ClassroomId: 3,
-				DocumentId:  4},
+				DocumentId:  4,
+			},
 			{
 				Id:          5,
 				UserId:      6,

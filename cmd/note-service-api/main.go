@@ -13,7 +13,7 @@ func main() {
 
 	swappedMap, err := utills.SwapKeyAndValue(map[int64]string{1: "one"})
 	if err != nil {
-		fmt.Printf("failed to swapping key and value %s", err)
+		fmt.Printf("failed to swapping key and value: %s", err.Error())
 		return
 	}
 
@@ -21,10 +21,10 @@ func main() {
 
 	err = OpenCloseFile("cmd/note-service-api/text.txt")
 	if err != nil {
-		fmt.Printf("OpenCloseFile() function execution error %s\n\n", err)
+		fmt.Printf("failed to open or close file: %s\n\n", err.Error())
 	}
 
-	fmt.Printf("OpenCloseFile() function comleted\n\n")
+	fmt.Printf("function open and close file comleted\n\n")
 
 	data := []api.Note{
 		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
@@ -37,14 +37,14 @@ func main() {
 
 	dataMap, err := utills.ConvertSliceToMap(data)
 	if err != nil {
-		fmt.Printf("failed to converting slice to map %s", err)
+		fmt.Printf("failed to converting slice to map: %s", err.Error())
 	}
 
 	fmt.Println(dataMap)
 
 	splitSlice, err := utills.SplitSlice(data, 5)
 	if err != nil {
-		fmt.Printf("failed to spliting slice %s", err)
+		fmt.Printf("failed to spliting slice: %s", err.Error())
 	}
 
 	fmt.Println(splitSlice)
@@ -62,7 +62,7 @@ func OpenCloseFile(file string) error {
 			defer func(data *os.File) {
 				err = data.Close()
 				if err != nil {
-					fmt.Printf("failed to closing file: %s", err)
+					fmt.Printf("failed to closing file: %s", err.Error())
 					return
 				}
 
