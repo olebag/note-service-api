@@ -5,38 +5,42 @@ import (
 
 	"github.com/scipie28/note-service-api/internal/app/api"
 	"github.com/scipie28/note-service-api/internal/repo"
+	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
 type Flusher interface {
-	Flush(note []api.Note, butchSize uint32) ([]api.Note, error)
+	Flush(note []api.Note, batchSize uint64) ([]api.Note, error)
 }
 
 type flusher struct {
 	repo repo.Repo
 }
 
-func New(repo repo.Repo) Flusher {
+func NewFlusher(repo *mocksRepo.MockRepo) Flusher {
 	return &flusher{repo}
 }
 
-func (f *flusher) Flush(notes []api.Note, batchSize uint32) ([]api.Note, error) {
-	batchs, err := utills.SplitSlice(notes, batchSize)
+func (f *flusher) Flush(notes []api.Note, batchSize uint64) ([]api.Note, error) {
+	batches, err := utills.SplitSlice(notes, batchSize)
 	if err != nil {
+		log.Printf("failed to spliting slice: %s", err.Error())
 		return nil, err
 	}
 
-	for i, batch := range batchs {
+	for i, batch := range batches {
 		num, err := f.repo.MultiAdd(batch)
 		if err != nil {
-			save, err2 := utills.TwoToOneDimensionalSlice(batchs[i:])
+			log.Printf("failed to add slice: %s", err.Error())
 
-			if err2 != nil {
-				return nil, err2
+			var save = make([]api.Note, 0)
+			for _, v := range batches[i:] {
+				save = append(save, v...)
 			}
 
 			return save, err
 		}
+
 		log.Printf("%d notes added", num)
 	}
 

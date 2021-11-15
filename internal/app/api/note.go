@@ -7,9 +7,9 @@ import (
 // Note...
 type Note struct {
 	Id          uint64
-	UserId      uint32
-	ClassroomId uint32
-	DocumentId  uint32
+	UserId      uint64
+	ClassroomId uint64
+	DocumentId  uint64
 }
 
 func (n *Note) String() {

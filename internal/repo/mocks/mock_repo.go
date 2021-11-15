@@ -49,7 +49,7 @@ func (mr *MockRepoMockRecorder) Add(arg0 interface{}) *gomock.Call {
 }
 
 // Describe mocks base method.
-func (m *MockRepo) Describe(arg0 int32) (api.Note, error) {
+func (m *MockRepo) Describe(arg0 int64) (api.Note, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Describe", arg0)
 	ret0, _ := ret[0].(api.Note)
@@ -64,10 +64,10 @@ func (mr *MockRepoMockRecorder) Describe(arg0 interface{}) *gomock.Call {
 }
 
 // MultiAdd mocks base method.
-func (m *MockRepo) MultiAdd(arg0 []api.Note) (int32, error) {
+func (m *MockRepo) MultiAdd(arg0 []api.Note) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "MultiAdd", arg0)
-	ret0, _ := ret[0].(int32)
+	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -79,7 +79,7 @@ func (mr *MockRepoMockRecorder) MultiAdd(arg0 interface{}) *gomock.Call {
 }
 
 // Remove mocks base method.
-func (m *MockRepo) Remove(arg0 int32) error {
+func (m *MockRepo) Remove(arg0 int64) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Remove", arg0)
 	ret0, _ := ret[0].(error)
@@ -93,7 +93,7 @@ func (mr *MockRepoMockRecorder) Remove(arg0 interface{}) *gomock.Call {
 }
 
 // Update mocks base method.
-func (m *MockRepo) Update(arg0 int32, arg1 api.Note) error {
+func (m *MockRepo) Update(arg0 int64, arg1 api.Note) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Update", arg0, arg1)
 	ret0, _ := ret[0].(error)

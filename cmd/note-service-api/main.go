@@ -11,9 +11,9 @@ import (
 func main() {
 	var err error
 
-	swappedMap, err := utills.SwapKeyAndValue(map[int32]string{1: "one"})
+	swappedMap, err := utills.SwapKeyAndValue(map[int64]string{1: "one"})
 	if err != nil {
-		fmt.Printf("error to start function SwapKeyAndValue %s", err)
+		fmt.Printf("failed to function SwapKeyAndValue %s", err)
 		return
 	}
 
@@ -37,14 +37,14 @@ func main() {
 
 	dataMap, err := utills.ConvertSliceToMap(data)
 	if err != nil {
-		fmt.Printf("error to start function ConvertSliceToMap %s", err)
+		fmt.Printf("failed to function ConvertSliceToMap %s", err)
 	}
 
 	fmt.Println(dataMap)
 
 	splitSlice, err := utills.SplitSlice(data, 5)
 	if err != nil {
-		fmt.Printf("error to start function SplitSlice %s", err)
+		fmt.Printf("failed to function SplitSlice %s", err)
 	}
 
 	fmt.Println(splitSlice)

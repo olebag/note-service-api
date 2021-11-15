@@ -7,9 +7,9 @@ import (
 )
 
 type Repo interface {
-	Add(api.Note) error
-	MultiAdd([]api.Note) (int32, error)      //окл-во записей записанных и ошибко
-	Update(int32, api.Note) error            // индекс, ноту/ ерор
-	Remove(int32) error                      // ид/ еррор
-	Describe(int322 int32) (api.Note, error) //  приним ид/ саму ноду-которую записал и  еррор
+	Add(note api.Note) error
+	MultiAdd(notes []api.Note) (int64, error)
+	Update(id int64, note api.Note) error
+	Remove(id int64) error
+	Describe(id int64) (api.Note, error)
 }

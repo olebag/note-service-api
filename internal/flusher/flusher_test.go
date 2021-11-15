@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/scipie28/note-service-api/internal/app/api"
-	moksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
+	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,39 +14,56 @@ func TestFlusher_Flush(t *testing.T) {
 		mockCtrl = gomock.NewController(t)
 	)
 
-	mokNoteRepo := moksRepo.NewMockRepo(mockCtrl)
-	noteFlusher := New(mokNoteRepo)
+	var mokNoteRepo = mocksRepo.NewMockRepo(mockCtrl)
+	noteFlusher := NewFlusher(mokNoteRepo)
 
-	t.Run("success case", func(t *testing.T) {
-		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
-			{Id: 1,
-				UserId:      2,
-				ClassroomId: 3,
-				DocumentId:  4},
-		}).Return(int32(0), nil).Times(1)
-		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
-			{Id: 5,
-				UserId:      6,
-				ClassroomId: 7,
-				DocumentId:  8},
-		}).Return(int32(0), nil).Times(1)
+	t.Run("input value equal nil", func(t *testing.T) {
+		expectedRes := "error input values"
 
-		req := []api.Note{
-			{Id: 1,
-				UserId:      2,
-				ClassroomId: 3,
-				DocumentId:  4},
-			{Id: 5,
-				UserId:      6,
-				ClassroomId: 7,
-				DocumentId:  8},
-		}
+		_, err := noteFlusher.Flush(nil, 1)
+		require.Error(t, err)
+		require.Equal(t, expectedRes, err.Error())
+	})
 
-		res, err := noteFlusher.Flush(req, 1)
-
+	t.Run("input value equal zero", func(t *testing.T) {
+		mokNoteRepo.EXPECT().MultiAdd(make([]api.Note, 0)).Return(int64(0), nil).Times(1)
+		req := make([]api.Note, 0)
 		var expectedRes []api.Note
 
+		res, err := noteFlusher.Flush(req, 1)
 		require.Nil(t, err)
 		require.Equal(t, expectedRes, res)
 	})
+
+	t.Run("input one note", func(t *testing.T) {
+		gomock.InOrder()
+		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
+			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}).Return(int64(0), nil).Times(1)
+
+		req := []api.Note{
+			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}
+		var expectedRes []api.Note
+
+		res, err := noteFlusher.Flush(req, 1)
+		require.Nil(t, err)
+		require.Equal(t, expectedRes, res)
+	})
+
+	t.Run("success case", func(t *testing.T) {
+		gomock.InOrder()
+		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
+			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}).Return(int64(0), nil).Times(1)
+		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
+			{Id: 5, UserId: 6, ClassroomId: 7, DocumentId: 8}}).Return(int64(0), nil).Times(1)
+
+		req := []api.Note{
+			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4},
+			{Id: 5, UserId: 6, ClassroomId: 7, DocumentId: 8}}
+		var expectedRes []api.Note
+
+		res, err := noteFlusher.Flush(req, 1)
+		require.Nil(t, err)
+		require.Equal(t, expectedRes, res)
+	})
+
 }

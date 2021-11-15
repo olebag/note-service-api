@@ -9,8 +9,8 @@ import (
 
 var filter = []string{"a", "b", "c", "d"}
 
-func SwapKeyAndValue(data map[int32]string) (map[string]int32, error) {
-	res := make(map[string]int32)
+func SwapKeyAndValue(data map[int64]string) (map[string]int64, error) {
+	res := make(map[string]int64)
 
 	for key, value := range data {
 		if _, found := res[value]; found {
@@ -50,46 +50,33 @@ func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
 	return res, nil
 }
 
-func SplitSlice(notes []api.Note, butchSize uint32) ([][]api.Note, error) {
-	if butchSize <= 0 || notes == nil {
+func SplitSlice(notes []api.Note, batchSize uint64) ([][]api.Note, error) {
+	if batchSize <= 0 || notes == nil {
 		return nil, errors.New("error input values")
 	}
 
-	if uint32(len(notes)) <= butchSize {
-		res := make([][]api.Note, 0)
-		res = append(res, notes)
-		return res, nil
+	if uint64(len(notes)) <= batchSize {
+		return [][]api.Note{notes}, nil
 	}
 
-	numBatches := uint32(len(notes)) / butchSize
-	if uint32(len(notes))%butchSize != 0 {
+	numBatches := uint64(len(notes)) / batchSize
+	if uint64(len(notes))%batchSize != 0 {
 		numBatches++
 	}
 
-	var end uint32
+	var end uint64
 
 	res := make([][]api.Note, 0, numBatches)
 
-	for begin := uint32(0); begin < uint32(len(notes)); {
-		end += butchSize
-		if end > uint32(len(notes)) {
-			end = uint32(len(notes))
+	for begin := uint64(0); begin < uint64(len(notes)); {
+		end += batchSize
+		if end > uint64(len(notes)) {
+			end = uint64(len(notes))
 		}
 
 		res = append(res, notes[begin:end])
-		begin += butchSize
+		begin += batchSize
 	}
 
-	return res, nil
-}
-
-func TwoToOneDimensionalSlice(data [][]api.Note) ([]api.Note, error) {
-	var res []api.Note
-	if len(data) <= 0 {
-		return nil, errors.New("error input values")
-	}
-	for _, val := range data {
-		res = append(res, val...)
-	}
 	return res, nil
 }
