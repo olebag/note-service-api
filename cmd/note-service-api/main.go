@@ -13,7 +13,7 @@ func main() {
 
 	swappedMap, err := utills.SwapKeyAndValue(map[int64]string{1: "one"})
 	if err != nil {
-		fmt.Printf("failed to function swapping key and value %s", err)
+		fmt.Printf("failed to swapping key and value %s", err)
 		return
 	}
 
