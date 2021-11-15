@@ -10,7 +10,7 @@ import (
 )
 
 type Flusher interface {
-	Flush(note []api.Note, batchSize uint64) ([]api.Note, error)
+	Flush(note []api.Note, batchSize int64) ([]api.Note, error)
 }
 
 type flusher struct {
@@ -21,7 +21,7 @@ func NewFlusher(repo *mocksRepo.MockRepo) Flusher {
 	return &flusher{repo}
 }
 
-func (f *flusher) Flush(notes []api.Note, batchSize uint64) ([]api.Note, error) {
+func (f *flusher) Flush(notes []api.Note, batchSize int64) ([]api.Note, error) {
 	batches, err := utills.SplitSlice(notes, batchSize)
 	if err != nil {
 		log.Printf("failed to spliting slice: %s", err.Error())
@@ -29,16 +29,16 @@ func (f *flusher) Flush(notes []api.Note, batchSize uint64) ([]api.Note, error) 
 	}
 
 	for i, batch := range batches {
-		num, err := f.repo.MultiAdd(batch)
-		if err != nil {
-			log.Printf("failed to add slice: %s", err.Error())
+		num, errAdd := f.repo.MultiAdd(batch)
+		if errAdd != nil {
+			log.Printf("failed to add slice: %s", errAdd.Error())
 
 			var save = make([]api.Note, 0)
 			for _, v := range batches[i:] {
 				save = append(save, v...)
 			}
 
-			return save, err
+			return save, errAdd
 		}
 
 		log.Printf("%d notes added", num)

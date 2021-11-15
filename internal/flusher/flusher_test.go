@@ -14,8 +14,8 @@ func TestFlusher_Flush(t *testing.T) {
 		mockCtrl = gomock.NewController(t)
 	)
 
-	var mokNoteRepo = mocksRepo.NewMockRepo(mockCtrl)
-	noteFlusher := NewFlusher(mokNoteRepo)
+	var mockNoteRepo = mocksRepo.NewMockRepo(mockCtrl)
+	noteFlusher := NewFlusher(mockNoteRepo)
 
 	t.Run("input value equal nil", func(t *testing.T) {
 		expectedRes := "error input values"
@@ -25,8 +25,8 @@ func TestFlusher_Flush(t *testing.T) {
 		require.Equal(t, expectedRes, err.Error())
 	})
 
-	t.Run("input value equal zero", func(t *testing.T) {
-		mokNoteRepo.EXPECT().MultiAdd(make([]api.Note, 0)).Return(int64(0), nil).Times(1)
+	t.Run("len input value equal zero", func(t *testing.T) {
+		mockNoteRepo.EXPECT().MultiAdd(make([]api.Note, 0)).Return(int64(0), nil).Times(1)
 		req := make([]api.Note, 0)
 		var expectedRes []api.Note
 
@@ -37,8 +37,15 @@ func TestFlusher_Flush(t *testing.T) {
 
 	t.Run("input one note", func(t *testing.T) {
 		gomock.InOrder()
-		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
-			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}).Return(int64(0), nil).Times(1)
+		mockNoteRepo.EXPECT().MultiAdd([]api.Note{
+			{
+				Id:          1,
+				UserId:      2,
+				ClassroomId: 3,
+				DocumentId:  4,
+			},
+		},
+		).Return(int64(0), nil).Times(1)
 
 		req := []api.Note{
 			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}
@@ -50,15 +57,38 @@ func TestFlusher_Flush(t *testing.T) {
 	})
 
 	t.Run("success case", func(t *testing.T) {
-		gomock.InOrder()
-		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
-			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4}}).Return(int64(0), nil).Times(1)
-		mokNoteRepo.EXPECT().MultiAdd([]api.Note{
-			{Id: 5, UserId: 6, ClassroomId: 7, DocumentId: 8}}).Return(int64(0), nil).Times(1)
+		gomock.InOrder(mockNoteRepo.EXPECT().MultiAdd([]api.Note{
+			{
+				Id:          1,
+				UserId:      2,
+				ClassroomId: 3,
+				DocumentId:  4,
+			},
+		},
+		).Return(int64(0), nil).Times(1),
+			mockNoteRepo.EXPECT().MultiAdd([]api.Note{
+				{
+					Id:          5,
+					UserId:      6,
+					ClassroomId: 7,
+					DocumentId:  8,
+				},
+			},
+			).Return(int64(0), nil).Times(1),
+		)
 
 		req := []api.Note{
-			{Id: 1, UserId: 2, ClassroomId: 3, DocumentId: 4},
-			{Id: 5, UserId: 6, ClassroomId: 7, DocumentId: 8}}
+			{Id: 1,
+				UserId:      2,
+				ClassroomId: 3,
+				DocumentId:  4},
+			{
+				Id:          5,
+				UserId:      6,
+				ClassroomId: 7,
+				DocumentId:  8,
+			},
+		}
 		var expectedRes []api.Note
 
 		res, err := noteFlusher.Flush(req, 1)

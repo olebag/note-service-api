@@ -41,8 +41,8 @@ func FilterSlice(data []string) ([]string, error) {
 	return res, nil
 }
 
-func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
-	res := make(map[uint64]api.Note)
+func ConvertSliceToMap(users []api.Note) (map[int64]api.Note, error) {
+	res := make(map[int64]api.Note)
 	for _, v := range users {
 		res[v.Id] = v
 	}
@@ -50,28 +50,28 @@ func ConvertSliceToMap(users []api.Note) (map[uint64]api.Note, error) {
 	return res, nil
 }
 
-func SplitSlice(notes []api.Note, batchSize uint64) ([][]api.Note, error) {
+func SplitSlice(notes []api.Note, batchSize int64) ([][]api.Note, error) {
 	if batchSize <= 0 || notes == nil {
 		return nil, errors.New("error input values")
 	}
 
-	if uint64(len(notes)) <= batchSize {
+	if int64(len(notes)) <= batchSize {
 		return [][]api.Note{notes}, nil
 	}
 
-	numBatches := uint64(len(notes)) / batchSize
-	if uint64(len(notes))%batchSize != 0 {
+	numBatches := int64(len(notes)) / batchSize
+	if int64(len(notes))%batchSize != 0 {
 		numBatches++
 	}
 
-	var end uint64
+	var end int64
 
 	res := make([][]api.Note, 0, numBatches)
 
-	for begin := uint64(0); begin < uint64(len(notes)); {
+	for begin := int64(0); begin < int64(len(notes)); {
 		end += batchSize
-		if end > uint64(len(notes)) {
-			end = uint64(len(notes))
+		if end > int64(len(notes)) {
+			end = int64(len(notes))
 		}
 
 		res = append(res, notes[begin:end])

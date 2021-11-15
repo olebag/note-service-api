@@ -16,7 +16,7 @@ func TestSwapKeyAndValue(t *testing.T) {
 		require.Equal(t, expectedRes, res)
 	})
 
-	t.Run("input value equal zero", func(t *testing.T) {
+	t.Run("len input value equal zero", func(t *testing.T) {
 		req := make(map[int64]string)
 		expectedRes := map[string]int64{}
 
@@ -68,7 +68,7 @@ func TestFilterSlice(t *testing.T) {
 		require.Equal(t, expectedRes, res)
 	})
 
-	t.Run("input values equal zero", func(t *testing.T) {
+	t.Run("len input values equal zero", func(t *testing.T) {
 		req := []string{""}
 		var expectedRes []string
 
@@ -107,16 +107,16 @@ func TestFilterSlice(t *testing.T) {
 
 func TestConvertSliceToMap(t *testing.T) {
 	t.Run("input value equal nil", func(t *testing.T) {
-		expectedRes := make(map[uint64]api.Note)
+		expectedRes := make(map[int64]api.Note)
 
 		res, err := ConvertSliceToMap(nil)
 		require.Nil(t, err)
 		require.Equal(t, expectedRes, res)
 	})
 
-	t.Run("input values equal zero", func(t *testing.T) {
+	t.Run("len input values equal zero", func(t *testing.T) {
 		req := make([]api.Note, 0)
-		expectedRes := make(map[uint64]api.Note)
+		expectedRes := make(map[int64]api.Note)
 
 		res, err := ConvertSliceToMap(req)
 		require.Nil(t, err)
@@ -128,7 +128,7 @@ func TestConvertSliceToMap(t *testing.T) {
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
-		expectedRes := map[uint64]api.Note{
+		expectedRes := map[int64]api.Note{
 			1: {Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			2: {Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
@@ -158,11 +158,11 @@ func TestSplitSlice(t *testing.T) {
 
 	})
 
-	t.Run("input values equal zero ", func(t *testing.T) {
-		req := make([]api.Note, 0)
+	t.Run("len input values equal zero ", func(t *testing.T) {
+		reqZV := make([]api.Note, 0)
 		expectedError := "error input values"
 
-		_, err := SplitSlice(req, 0)
+		_, err := SplitSlice(reqZV, 0)
 		require.Error(t, err)
 		require.Equal(t, expectedError, err.Error())
 

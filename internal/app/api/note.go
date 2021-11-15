@@ -6,10 +6,10 @@ import (
 
 // Note...
 type Note struct {
-	Id          uint64
-	UserId      uint64
-	ClassroomId uint64
-	DocumentId  uint64
+	Id          int64
+	UserId      int64
+	ClassroomId int64
+	DocumentId  int64
 }
 
 func (n *Note) String() {
