@@ -21,10 +21,10 @@ func main() {
 
 	err = OpenCloseFile("cmd/note-service-api/text.txt")
 	if err != nil {
-		fmt.Printf("failed to open or close file: %s\n\n", err.Error())
+		fmt.Printf("failed to opening or closing file: %s\n\n", err.Error())
 	}
 
-	fmt.Printf("function open and close file comleted\n\n")
+	fmt.Printf("function opening and closeing file comleted\n\n")
 
 	data := []api.Note{
 		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
