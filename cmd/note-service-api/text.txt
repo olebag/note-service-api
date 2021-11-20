@@ -1,1 +1,23 @@
 test file
+
+Задание V
+Нужно в пакете saver имплементировать Saver интерфейс,
+с возможностью писать в хранилище данные, через Flusher,
+сброс данных происходит во flusher по определенному
+таймауту или по вызову метода Close
+package saver
+    type Saver interface {
+        Save(entity models.Entity) // заменить на свою сущность
+          // Init()
+        Close()
+}
+// NewSaver возвращает Saver с поддержкой переодического сохранения
+func NewSaver(
+ capacity uint,
+ flusher flusher.Flusher,
+  // ...
+) Saver {
+  // ...
+}
+До сброса в хранилище, данные хранятся в slice.
+который пренадлежит saver-у. задания capacity данного slice-a идет на этапе конструирование -  при вызове NewSaver
