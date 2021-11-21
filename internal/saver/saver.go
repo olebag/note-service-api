@@ -30,7 +30,7 @@ type saver struct {
 	initInitialized bool
 }
 
-func NewSaver(capacity int64, bachSize int64, flusher flusher.Flusher, alarmer alarmer.Alarmer, lossAllData bool) Saver {
+func NewSaver(capacity, bachSize int64, flusher flusher.Flusher, alarmer alarmer.Alarmer, lossAllData bool) Saver {
 	return &saver{
 		capacity:        capacity,
 		bachSize:        bachSize,
