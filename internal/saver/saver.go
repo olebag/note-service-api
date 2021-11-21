@@ -4,10 +4,11 @@ package saver
 
 import (
 	"errors"
+	"log"
+
 	"github.com/scipie28/note-service-api/internal/alarmer"
 	"github.com/scipie28/note-service-api/internal/app/api"
 	"github.com/scipie28/note-service-api/internal/flusher"
-	"log"
 )
 
 // Saver ...
@@ -49,13 +50,12 @@ func (s *saver) Init() error {
 	}
 	err := s.alarmer.Init()
 	if err != nil {
-
 		return err
 	}
+
 	s.initInitialized = true
 
 	go func() {
-
 		for {
 			select {
 			case note := <-s.notesChan:
@@ -93,11 +93,13 @@ func (s *saver) Close() {
 }
 
 func (s *saver) saveToBuffer(note api.Note) {
-	if int64(len(s.notes)) >= s.capacity && s.capacity != 1 {
-		if s.lossAllData {
+	if int64(len(s.notes)) >= s.capacity {
+		if s.lossAllData || s.capacity <= 1 {
 			s.notes = s.notes[:0]
+		} else {
+			s.notes = s.notes[1:]
 		}
-		s.notes = s.notes[1:]
+
 	}
 	s.notes = append(s.notes, note)
 }
