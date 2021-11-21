@@ -44,7 +44,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(100 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(10 * time.Millisecond)
 			exmSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -65,7 +65,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(10 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -169,7 +169,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(100 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(10 * time.Millisecond)
 			exmSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -190,7 +190,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(200 * time.Millisecond)
+				time.Sleep(20 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -210,7 +210,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(100 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(10 * time.Millisecond)
 			exmSaver := NewSaver(3, 1, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -231,7 +231,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(200 * time.Millisecond)
+				time.Sleep(20 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -251,7 +251,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(100 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(10 * time.Millisecond)
 			exmSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -272,7 +272,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(200 * time.Millisecond)
+				time.Sleep(20 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -291,7 +291,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(200 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(20 * time.Millisecond)
 			exmSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -312,7 +312,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(10 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -332,7 +332,7 @@ func TestSaver_Save(t *testing.T) {
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(200 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(20 * time.Millisecond)
 			exmSaver := NewSaver(3, 1, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -353,7 +353,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(10 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
@@ -366,10 +366,11 @@ func TestSaver_Save(t *testing.T) {
 				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1),
 				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1),
 				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1),
+				//mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1),
 			)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer := alarmer.NewAlarmer(200 * time.Millisecond)
+			exmAlarmer := alarmer.NewAlarmer(20 * time.Millisecond)
 			exmSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
 
 			errAlarm := exmAlarmer.Init()
@@ -390,7 +391,7 @@ func TestSaver_Save(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(100 * time.Millisecond)
+				time.Sleep(10 * time.Millisecond)
 			}
 
 			require.Nil(t, errSaver)
