@@ -364,7 +364,7 @@ func TestSaver(t *testing.T) {
 		})
 
 		t.Run("input capacity less bach size", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(3)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
 			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
