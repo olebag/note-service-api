@@ -326,7 +326,7 @@ func TestSaver(t *testing.T) {
 			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(500 * time.Millisecond)
 			if errNewAlarm != nil {
 				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
 			}
@@ -354,7 +354,7 @@ func TestSaver(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(10 * time.Millisecond)
+				time.Sleep(250 * time.Millisecond)
 			}
 
 			require.Nil(t, errInitSaver)
