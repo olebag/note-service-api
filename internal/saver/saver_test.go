@@ -29,227 +29,43 @@ func TestSaver(t *testing.T) {
 		{Id: 31, UserId: 31, ClassroomId: 123, DocumentId: 16},
 		{Id: 41, UserId: 41, ClassroomId: 124, DocumentId: 17},
 	}
+	t.Run("input capacity equal zero", func(t *testing.T) {
+		expectedError := "failed to capacity value"
 
-	t.Run("time alarmer equal time write in buffer", func(t *testing.T) {
-		t.Run("input capacity and batch size equal one", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		noteFlusher := flusher.NewFlusher(mockNoteRepo)
+		exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
 
-			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
-			if errNewAlarm != nil {
-				log.Printf("failed to crate new alarmer %s", errNewAlarm.Error())
-			}
+		_, errNewSaver := NewSaver(0, 3, noteFlusher, exmAlarmer, true)
+		require.Nil(t, errNewAlarm)
+		require.NotNil(t, errNewSaver)
+		require.Equal(t, expectedError, errNewSaver.Error())
+	})
 
-			exmSaver, errNewSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
-			if errNewSaver != nil {
-				log.Printf("failed to crate new saver %s", errNewSaver.Error())
-			}
+	t.Run("input batch size equal zero", func(t *testing.T) {
+		expectedError := "failed to batch size value"
 
-			errInitAlarm := exmAlarmer.Init()
-			if errInitAlarm != nil {
-				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
-				return
-			}
+		noteFlusher := flusher.NewFlusher(mockNoteRepo)
+		exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
 
-			errInitSaver := exmSaver.Init()
-			if errInitSaver != nil {
-				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
-				return
-			}
-			defer exmSaver.Close()
-
-			for _, val := range req {
-				err := exmSaver.Save(val)
-				if err != nil {
-					log.Printf("failed to save %s", err.Error())
-				}
-				time.Sleep(10 * time.Millisecond)
-			}
-
-			require.Nil(t, errInitSaver)
-			require.Nil(t, errNewSaver)
-			require.Nil(t, errInitAlarm)
-			require.Nil(t, errNewAlarm)
-		})
-
-		t.Run("input bach size less capacity", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
-
-			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
-			if errNewAlarm != nil {
-				log.Printf("failed to crate new alarmer %s", errNewAlarm.Error())
-			}
-
-			errInitAlarm := exmAlarmer.Init()
-			if errInitAlarm != nil {
-				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
-				return
-			}
-
-			exmSaver, errNewSaver := NewSaver(3, 1, noteFlusher, exmAlarmer, true)
-			if errNewSaver != nil {
-				log.Printf("failed to crate new saver %s", errNewSaver.Error())
-			}
-
-			errInitSaver := exmSaver.Init()
-			if errInitSaver != nil {
-				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
-				return
-			}
-			defer exmSaver.Close()
-
-			for _, val := range req {
-				err := exmSaver.Save(val)
-				if err != nil {
-					log.Printf("failed to save %s", err.Error())
-				}
-				time.Sleep(10 * time.Millisecond)
-			}
-
-			require.Nil(t, errInitSaver)
-			require.Nil(t, errNewSaver)
-			require.Nil(t, errInitAlarm)
-			require.Nil(t, errNewAlarm)
-		})
-
-		t.Run("input capacity less bach size", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
-
-			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
-			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
-			}
-
-			exmSaver, errNewSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
-			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
-			}
-
-			errInitAlarm := exmAlarmer.Init()
-			if errInitAlarm != nil {
-				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
-				return
-			}
-
-			errInitSaver := exmSaver.Init()
-			if errInitSaver != nil {
-				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
-				return
-			}
-			defer exmSaver.Close()
-
-			for _, val := range req {
-				err := exmSaver.Save(val)
-				if err != nil {
-					log.Printf("failed to save %s", err.Error())
-				}
-				time.Sleep(10 * time.Millisecond)
-			}
-
-			require.Nil(t, errInitSaver)
-			require.Nil(t, errNewSaver)
-			require.Nil(t, errInitAlarm)
-			require.Nil(t, errNewAlarm)
-		})
+		_, errNewSaver := NewSaver(3, 0, noteFlusher, exmAlarmer, true)
+		require.Nil(t, errNewAlarm)
+		require.NotNil(t, errNewSaver)
+		require.Equal(t, expectedError, errNewSaver.Error())
 	})
 
 	t.Run("time alarmer less time write in buffer", func(t *testing.T) {
-		t.Run("input capacity and batch size equal one", func(t *testing.T) {
+		t.Run("input capacity equal one", func(t *testing.T) {
 			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(5 * time.Millisecond)
 			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
-			}
-
-			exmSaver, errNewSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
-			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
-			}
-
-			errInitAlarm := exmAlarmer.Init()
-			if errInitAlarm != nil {
-				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
-				return
-			}
-
-			errInitSaver := exmSaver.Init()
-			if errInitSaver != nil {
-				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
-				return
-			}
-			defer exmSaver.Close()
-
-			for _, val := range req {
-				err := exmSaver.Save(val)
-				if err != nil {
-					log.Printf("failed to save %s", err.Error())
-				}
-				time.Sleep(20 * time.Millisecond)
-			}
-
-			require.Nil(t, errInitSaver)
-			require.Nil(t, errNewSaver)
-			require.Nil(t, errInitAlarm)
-			require.Nil(t, errNewAlarm)
-		})
-
-		t.Run("input bach size less capacity", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
-
-			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
-			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
-			}
-
-			exmSaver, errNewSaver := NewSaver(3, 1, noteFlusher, exmAlarmer, true)
-			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
-			}
-
-			errInitAlarm := exmAlarmer.Init()
-			if errInitAlarm != nil {
-				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
-				return
-			}
-
-			errInitSaver := exmSaver.Init()
-			if errInitSaver != nil {
-				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
-				return
-			}
-			defer exmSaver.Close()
-
-			for _, val := range req {
-				err := exmSaver.Save(val)
-				if err != nil {
-					log.Printf("failed to save %s", err.Error())
-				}
-				time.Sleep(20 * time.Millisecond)
-			}
-
-			require.Nil(t, errInitSaver)
-			require.Nil(t, errNewSaver)
-			require.Nil(t, errInitAlarm)
-			require.Nil(t, errNewAlarm)
-		})
-
-		t.Run("input capacity less bach size", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
-
-			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
-			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
 			}
 
 			exmSaver, errNewSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
 			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
 			}
 
 			errInitAlarm := exmAlarmer.Init()
@@ -269,6 +85,88 @@ func TestSaver(t *testing.T) {
 				err := exmSaver.Save(val)
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
+				}
+				time.Sleep(20 * time.Millisecond)
+			}
+
+			require.Nil(t, errInitSaver)
+			require.Nil(t, errNewSaver)
+			require.Nil(t, errInitAlarm)
+			require.Nil(t, errNewAlarm)
+		})
+
+		t.Run("input capacity less slice notes", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+
+			noteFlusher := flusher.NewFlusher(mockNoteRepo)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(5 * time.Millisecond)
+			if errNewAlarm != nil {
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
+			}
+
+			exmSaver, errNewSaver := NewSaver(3, 3, noteFlusher, exmAlarmer, true)
+			if errNewSaver != nil {
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
+			}
+
+			errInitAlarm := exmAlarmer.Init()
+			if errInitAlarm != nil {
+				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
+				return
+			}
+
+			errInitSaver := exmSaver.Init()
+			if errInitSaver != nil {
+				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
+				return
+			}
+			defer exmSaver.Close()
+
+			for _, val := range req {
+				err := exmSaver.Save(val)
+				if err != nil {
+					log.Printf("failed to save: %s", err.Error())
+				}
+				time.Sleep(20 * time.Millisecond)
+			}
+
+			require.Nil(t, errInitSaver)
+			require.Nil(t, errNewSaver)
+			require.Nil(t, errInitAlarm)
+			require.Nil(t, errNewAlarm)
+		})
+
+		t.Run("input capacity more slice notes", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+
+			noteFlusher := flusher.NewFlusher(mockNoteRepo)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(5 * time.Millisecond)
+			if errNewAlarm != nil {
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
+			}
+
+			exmSaver, errNewSaver := NewSaver(9, 3, noteFlusher, exmAlarmer, true)
+			if errNewSaver != nil {
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
+			}
+
+			errInitAlarm := exmAlarmer.Init()
+			if errInitAlarm != nil {
+				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
+				return
+			}
+
+			errInitSaver := exmSaver.Init()
+			if errInitSaver != nil {
+				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
+				return
+			}
+			defer exmSaver.Close()
+
+			for _, val := range req {
+				err := exmSaver.Save(val)
+				if err != nil {
+					log.Printf("failed to save: %s", err.Error())
 				}
 				time.Sleep(20 * time.Millisecond)
 			}
@@ -281,18 +179,18 @@ func TestSaver(t *testing.T) {
 	})
 
 	t.Run("time write in buffer less time alarmer", func(t *testing.T) {
-		t.Run("input capacity and batch size equal one", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(5)
+		t.Run("input capacity equal one", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
 			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
 			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
 			}
 
-			exmSaver, errNewSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
+			exmSaver, errNewSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
 			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
 			}
 
 			errInitAlarm := exmAlarmer.Init()
@@ -311,9 +209,9 @@ func TestSaver(t *testing.T) {
 			for _, val := range req {
 				err := exmSaver.Save(val)
 				if err != nil {
-					log.Printf("failed to save %s", err.Error())
+					log.Printf("failed to save: %s", err.Error())
 				}
-				time.Sleep(10 * time.Millisecond)
+				time.Sleep(5 * time.Millisecond)
 			}
 
 			require.Nil(t, errInitSaver)
@@ -322,18 +220,18 @@ func TestSaver(t *testing.T) {
 			require.Nil(t, errNewAlarm)
 		})
 
-		t.Run("input bach size less capacity", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		t.Run("input capacity less slice notes", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(500 * time.Millisecond)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
 			if errNewAlarm != nil {
-				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
 			}
 
 			exmSaver, errNewSaver := NewSaver(3, 1, noteFlusher, exmAlarmer, true)
 			if errNewSaver != nil {
-				log.Printf("fail to crate new saver %s", errNewSaver.Error())
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
 			}
 
 			errInitAlarm := exmAlarmer.Init()
@@ -352,9 +250,9 @@ func TestSaver(t *testing.T) {
 			for _, val := range req {
 				err := exmSaver.Save(val)
 				if err != nil {
-					log.Printf("failed to save %s", err.Error())
+					log.Printf("failed to save: %s", err.Error())
 				}
-				time.Sleep(250 * time.Millisecond)
+				time.Sleep(5 * time.Millisecond)
 			}
 
 			require.Nil(t, errInitSaver)
@@ -363,18 +261,61 @@ func TestSaver(t *testing.T) {
 			require.Nil(t, errNewAlarm)
 		})
 
-		//t.Run("input capacity less bach size", func(t *testing.T) {
-		//	mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+		t.Run("input capacity more slice notes", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(4)
+
+			noteFlusher := flusher.NewFlusher(mockNoteRepo)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
+			if errNewAlarm != nil {
+				log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
+			}
+
+			exmSaver, errNewSaver := NewSaver(8, 3, noteFlusher, exmAlarmer, true)
+			if errNewSaver != nil {
+				log.Printf("fail to crate new saver: %s", errNewSaver.Error())
+			}
+
+			errInitAlarm := exmAlarmer.Init()
+			if errInitAlarm != nil {
+				log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
+				return
+			}
+
+			errInitSaver := exmSaver.Init()
+			if errInitAlarm != nil {
+				log.Printf("failed to initialized saver: %s", errInitSaver.Error())
+				return
+			}
+			defer exmSaver.Close()
+
+			for _, val := range req {
+				err := exmSaver.Save(val)
+				if err != nil {
+					log.Printf("failed to save: %s", err.Error())
+				}
+				time.Sleep(5 * time.Millisecond)
+			}
+
+			require.Nil(t, errInitSaver)
+			require.Nil(t, errNewSaver)
+			require.Nil(t, errInitAlarm)
+			require.Nil(t, errNewAlarm)
+		})
+	})
+
+	t.Run("time alarmer equal time write in buffer", func(t *testing.T) {
+		//t.Run("input capacity more slice notes", func(t *testing.T) {
+		//	mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
 		//
 		//	noteFlusher := flusher.NewFlusher(mockNoteRepo)
-		//	exmAlarmer, errNewAlarm := alarmer.NewAlarmer(500 * time.Millisecond)
+		//	exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
 		//	if errNewAlarm != nil {
-		//		log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
+		//		log.Printf("fail to crate new alarmer: %s", errNewAlarm.Error())
 		//	}
 		//
-		//	exmSaver, errNewSaver := NewSaver(1, 3, noteFlusher, exmAlarmer, true)
+		//	exmSaver, errNewSaver := NewSaver(9, 3, noteFlusher, exmAlarmer, true)
 		//	if errNewSaver != nil {
-		//		log.Printf("fail to crate new saver %s", errNewSaver.Error())
+		//		log.Printf("fail to crate new saver: %s", errNewSaver.Error())
 		//	}
 		//
 		//	errInitAlarm := exmAlarmer.Init()
@@ -384,7 +325,7 @@ func TestSaver(t *testing.T) {
 		//	}
 		//
 		//	errInitSaver := exmSaver.Init()
-		//	if errInitAlarm != nil {
+		//	if errInitSaver != nil {
 		//		log.Printf("failed to initialized saver: %s", errInitSaver.Error())
 		//		return
 		//	}
@@ -393,9 +334,9 @@ func TestSaver(t *testing.T) {
 		//	for _, val := range req {
 		//		err := exmSaver.Save(val)
 		//		if err != nil {
-		//			log.Printf("failed to save %s", err.Error())
+		//			log.Printf("failed to save: %s", err.Error())
 		//		}
-		//		time.Sleep(250 * time.Millisecond)
+		//		time.Sleep(10 * time.Millisecond)
 		//	}
 		//
 		//	require.Nil(t, errInitSaver)
@@ -403,44 +344,89 @@ func TestSaver(t *testing.T) {
 		//	require.Nil(t, errInitAlarm)
 		//	require.Nil(t, errNewAlarm)
 		//})
-	})
 
-	t.Run("input capacity equal zero", func(t *testing.T) {
-		expectedError := "failed to capacity value"
+		//t.Run("input capacity less slice notes", func(t *testing.T) {
+		//	mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		//
+		//	noteFlusher := flusher.NewFlusher(mockNoteRepo)
+		//	exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
+		//	if errNewAlarm != nil {
+		//		log.Printf("failed to crate new alarmer: %s", errNewAlarm.Error())
+		//	}
+		//
+		//	errInitAlarm := exmAlarmer.Init()
+		//	if errInitAlarm != nil {
+		//		log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
+		//		return
+		//	}
+		//
+		//	exmSaver, errNewSaver := NewSaver(3, 3, noteFlusher, exmAlarmer, true)
+		//	if errNewSaver != nil {
+		//		log.Printf("failed to crate new saver: %s", errNewSaver.Error())
+		//	}
+		//
+		//	errInitSaver := exmSaver.Init()
+		//	if errInitSaver != nil {
+		//		log.Printf("failed to initialized saver: %s", errInitSaver.Error())
+		//		return
+		//	}
+		//	defer exmSaver.Close()
+		//
+		//	for _, val := range req {
+		//		err := exmSaver.Save(val)
+		//		if err != nil {
+		//			log.Printf("failed to save: %s", err.Error())
+		//		}
+		//		time.Sleep(10 * time.Millisecond)
+		//	}
+		//
+		//	require.Nil(t, errInitSaver)
+		//	require.Nil(t, errNewSaver)
+		//	require.Nil(t, errInitAlarm)
+		//	require.Nil(t, errNewAlarm)
+		//})
 
-		noteFlusher := flusher.NewFlusher(mockNoteRepo)
-		exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
-		if errNewAlarm != nil {
-			log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
-		}
+		//t.Run("input capacity equal one", func(t *testing.T) {
+		//	mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		//
+		//	noteFlusher := flusher.NewFlusher(mockNoteRepo)
+		//	exmAlarmer, errNewAlarm := alarmer.NewAlarmer(10 * time.Millisecond)
+		//	if errNewAlarm != nil {
+		//		log.Printf("failed to crate new alarmer: %s", errNewAlarm.Error())
+		//	}
+		//
+		//	exmSaver, errNewSaver := NewSaver(1, 1, noteFlusher, exmAlarmer, true)
+		//	if errNewSaver != nil {
+		//		log.Printf("failed to crate new saver: %s", errNewSaver.Error())
+		//	}
+		//
+		//	errInitAlarm := exmAlarmer.Init()
+		//	if errInitAlarm != nil {
+		//		log.Printf("failed to initialized alarm: %s", errInitAlarm.Error())
+		//		return
+		//	}
+		//
+		//	errInitSaver := exmSaver.Init()
+		//	if errInitSaver != nil {
+		//		log.Printf("failed to initialized saver: %s", errInitSaver.Error())
+		//		return
+		//	}
+		//	defer exmSaver.Close()
+		//
+		//	for _, val := range req {
+		//		err := exmSaver.Save(val)
+		//		if err != nil {
+		//			log.Printf("failed to save: %s", err.Error())
+		//		}
+		//		time.Sleep(10 * time.Millisecond)
+		//	}
+		//
+		//	require.Nil(t, errInitSaver)
+		//	require.Nil(t, errNewSaver)
+		//	require.Nil(t, errInitAlarm)
+		//	require.Nil(t, errNewAlarm)
+		//})
 
-		_, errNewSaver := NewSaver(0, 3, noteFlusher, exmAlarmer, true)
-		if errNewSaver != nil {
-			log.Printf("fail to crate new saver %s", errNewSaver.Error())
-		}
-
-		require.Nil(t, errNewAlarm)
-		require.NotNil(t, errNewSaver)
-		require.Equal(t, expectedError, errNewSaver.Error())
-	})
-
-	t.Run("input batch size equal zero", func(t *testing.T) {
-		expectedError := "failed to batch size value"
-
-		noteFlusher := flusher.NewFlusher(mockNoteRepo)
-		exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
-		if errNewAlarm != nil {
-			log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
-		}
-
-		_, errNewSaver := NewSaver(3, 0, noteFlusher, exmAlarmer, true)
-		if errNewSaver != nil {
-			log.Printf("fail to crate new saver %s", errNewSaver.Error())
-		}
-
-		require.Nil(t, errNewAlarm)
-		require.NotNil(t, errNewSaver)
-		require.Equal(t, expectedError, errNewSaver.Error())
 	})
 
 }
