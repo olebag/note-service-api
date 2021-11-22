@@ -364,10 +364,10 @@ func TestSaver(t *testing.T) {
 		})
 
 		t.Run("input capacity less bach size", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(3)
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
 
 			noteFlusher := flusher.NewFlusher(mockNoteRepo)
-			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(20 * time.Millisecond)
+			exmAlarmer, errNewAlarm := alarmer.NewAlarmer(500 * time.Millisecond)
 			if errNewAlarm != nil {
 				log.Printf("fail to crate new alarmer %s", errNewAlarm.Error())
 			}
@@ -395,7 +395,7 @@ func TestSaver(t *testing.T) {
 				if err != nil {
 					log.Printf("failed to save %s", err.Error())
 				}
-				time.Sleep(10 * time.Millisecond)
+				time.Sleep(250 * time.Millisecond)
 			}
 
 			require.Nil(t, errInitSaver)
