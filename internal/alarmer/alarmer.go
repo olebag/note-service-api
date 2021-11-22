@@ -3,6 +3,7 @@ package alarmer
 //go:generate mockgen -destination=mocks/mock_alarmer.go -package=mocks . Alarmer
 
 import (
+	"errors"
 	"time"
 )
 
@@ -14,32 +15,49 @@ type Alarmer interface {
 }
 
 type alarmer struct {
-	duration time.Duration
-	alarm    chan struct{}
-	end      chan struct{}
+	duration    time.Duration
+	alarm       chan struct{}
+	end         chan struct{}
+	initializer bool
 }
 
-func NewAlarmer(duration time.Duration) Alarmer {
-	return &alarmer{
-		duration: duration,
-		alarm:    make(chan struct{}),
-		end:      make(chan struct{}),
+func NewAlarmer(duration time.Duration) (Alarmer, error) {
+	if duration <= 0 {
+		return nil, errors.New("failed to duration value")
 	}
+
+	return &alarmer{
+		duration:    duration,
+		alarm:       make(chan struct{}),
+		end:         make(chan struct{}),
+		initializer: true,
+	}, nil
 }
 
 func (a *alarmer) Init() error {
+	if !a.initializer {
+		return errors.New("the alarm has already been initialized")
+	}
+
 	go func() {
 		ticker := time.NewTicker(a.duration)
 		defer ticker.Stop()
+
 		for {
 			select {
 			case <-ticker.C:
-				a.alarm <- struct{}{}
+				select {
+				case a.alarm <- struct{}{}:
+				default:
+				}
+
 			case <-a.end:
 				return
 			}
 		}
 	}()
+
+	a.initializer = false
 
 	return nil
 }
