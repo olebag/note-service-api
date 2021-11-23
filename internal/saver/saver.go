@@ -27,16 +27,16 @@ type saver struct {
 	notesChan   chan api.Note
 	end         chan struct{}
 	lossAllData bool
-	initInit    bool
+	isInit      bool
 }
 
 func NewSaver(capacity, batchSize int64, flusher flusher.Flusher, alarmer alarmer.Alarmer, lossAllData bool) (Saver, error) {
 	if capacity <= 0 {
-		return nil, errors.New("failed to capacity value")
+		return nil, errors.New("error input value: capacity")
 	}
 
 	if batchSize <= 0 {
-		return nil, errors.New("failed to batch size value")
+		return nil, errors.New("error input value: batch size")
 	}
 
 	return &saver{
@@ -48,16 +48,24 @@ func NewSaver(capacity, batchSize int64, flusher flusher.Flusher, alarmer alarme
 		notes:       []api.Note{},
 		notesChan:   make(chan api.Note),
 		end:         make(chan struct{}),
-		initInit:    false,
+		isInit:      false,
 	}, nil
 }
 
 func (s *saver) Init() error {
-	if s.initInit {
+	if s.isInit {
 		return errors.New("the saver has already been initialized")
 	}
 
+	err := s.alarmer.Init()
+	if err != nil {
+		return err
+	}
+
 	go func() {
+		defer close(s.notesChan)
+		defer close(s.end)
+		defer s.alarmer.Close()
 		for {
 			select {
 			case note := <-s.notesChan:
@@ -72,13 +80,13 @@ func (s *saver) Init() error {
 		}
 	}()
 
-	s.initInit = true
+	s.isInit = true
 
 	return nil
 }
 
 func (s *saver) Save(note api.Note) error {
-	if !s.initInit {
+	if !s.isInit {
 		return errors.New("failed to initialized saver")
 	}
 
@@ -90,10 +98,6 @@ func (s *saver) Save(note api.Note) error {
 func (s *saver) Close() {
 	s.end <- struct{}{}
 	s.flushData()
-
-	s.alarmer.Close()
-	close(s.notesChan)
-	close(s.end)
 }
 
 func (s *saver) saveToBuffer(note api.Note) {

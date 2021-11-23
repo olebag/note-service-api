@@ -18,7 +18,7 @@ type alarmer struct {
 	duration time.Duration
 	alarm    chan struct{}
 	end      chan struct{}
-	initInit bool
+	isInit   bool
 }
 
 func NewAlarmer(duration time.Duration) (Alarmer, error) {
@@ -30,12 +30,12 @@ func NewAlarmer(duration time.Duration) (Alarmer, error) {
 		duration: duration,
 		alarm:    make(chan struct{}),
 		end:      make(chan struct{}),
-		initInit: true,
+		isInit:   true,
 	}, nil
 }
 
 func (a *alarmer) Init() error {
-	if !a.initInit {
+	if !a.isInit {
 		return errors.New("the alarm has already been initialized")
 	}
 
@@ -57,7 +57,7 @@ func (a *alarmer) Init() error {
 		}
 	}()
 
-	a.initInit = false
+	a.isInit = false
 
 	return nil
 }

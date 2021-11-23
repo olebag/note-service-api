@@ -9,20 +9,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestAlarmer_Alarm(t *testing.T) {
-
+func TestAlarmer(t *testing.T) {
 	maxRes := 6
 	minRes := 4
 	num := 0
 
-	alarmer, errNewAlarm := NewAlarmer(1 * time.Second)
+	alarmerTest, errNewAlarm := NewAlarmer(1 * time.Second)
 	if errNewAlarm != nil {
-		log.Printf("fail to crate new alarmer")
+		log.Printf("failed to crating new alarmer")
 	}
 
-	errInitAlarm := alarmer.Init()
+	errInitAlarm := alarmerTest.Init()
 	if errInitAlarm != nil {
-		log.Printf("fail to initialized alarmer")
+		log.Printf("failed to initialize alarmer")
 	}
 
 	timer := time.NewTimer(5 * time.Second)
@@ -34,7 +33,7 @@ func TestAlarmer_Alarm(t *testing.T) {
 
 		for {
 			select {
-			case <-alarmer.Alarm():
+			case <-alarmerTest.Alarm():
 				num++
 			case <-timer.C:
 				return
