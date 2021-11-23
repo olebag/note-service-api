@@ -24,7 +24,7 @@ func main() {
 		fmt.Printf("failed to opening or closing file: %s\n\n", err.Error())
 	}
 
-	fmt.Printf("function opening and closeing file comleted\n\n")
+	fmt.Printf("function opening and closeing file completed\n\n")
 
 	data := []api.Note{
 		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},

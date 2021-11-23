@@ -52,7 +52,7 @@ func ConvertSliceToMap(users []api.Note) (map[int64]api.Note, error) {
 
 func SplitSlice(notes []api.Note, batchSize int64) ([][]api.Note, error) {
 	if batchSize <= 0 || notes == nil {
-		return nil, errors.New("error input values")
+		return nil, errors.New("invalid input values")
 	}
 
 	if int64(len(notes)) <= batchSize {

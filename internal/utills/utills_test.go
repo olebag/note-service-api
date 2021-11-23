@@ -150,7 +150,7 @@ func TestSplitSlice(t *testing.T) {
 	)
 
 	t.Run("input value equal nil", func(t *testing.T) {
-		expectedError := "error input values"
+		expectedError := "invalid input values"
 
 		_, err := SplitSlice(nil, 1)
 		require.Error(t, err)
@@ -160,7 +160,7 @@ func TestSplitSlice(t *testing.T) {
 
 	t.Run("len input values equal zero ", func(t *testing.T) {
 		reqZV := make([]api.Note, 0)
-		expectedError := "error input values"
+		expectedError := "invalid input values"
 
 		_, err := SplitSlice(reqZV, 0)
 		require.Error(t, err)
@@ -231,7 +231,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("batch size less or equal zero", func(t *testing.T) {
-		expectedError := "error input values"
+		expectedError := "invalid input values"
 
 		_, err := SplitSlice(req, 0)
 		require.NotNil(t, err)
