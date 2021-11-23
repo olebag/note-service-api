@@ -23,7 +23,7 @@ type alarmer struct {
 
 func NewAlarmer(duration time.Duration) (Alarmer, error) {
 	if duration <= 0 {
-		return nil, errors.New("failed to duration value")
+		return nil, errors.New("error input value: duration")
 	}
 
 	return &alarmer{

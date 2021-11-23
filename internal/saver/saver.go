@@ -31,6 +31,14 @@ type saver struct {
 }
 
 func NewSaver(capacity, batchSize int64, flusher flusher.Flusher, alarmer alarmer.Alarmer, lossAllData bool) (Saver, error) {
+	if flusher == nil {
+		return nil, errors.New("error input value: flusher")
+	}
+
+	if alarmer == nil {
+		return nil, errors.New("error input value: alarmer")
+	}
+
 	if capacity <= 0 {
 		return nil, errors.New("error input value: capacity")
 	}
