@@ -110,7 +110,7 @@ func (s *saver) Close() {
 
 func (s *saver) saveToBuffer(note api.Note) {
 	if int64(len(s.notes)) >= s.capacity {
-		if s.lossAllData || s.capacity <= 1 {
+		if s.lossAllData || s.capacity == 1 {
 			s.notes = s.notes[:0]
 		} else {
 			s.notes = s.notes[1:]
@@ -121,9 +121,6 @@ func (s *saver) saveToBuffer(note api.Note) {
 }
 
 func (s *saver) flushData() {
-	if len(s.notes) <= 0 {
-		return
-	}
 
 	res, err := s.flusher.Flush(s.notes, s.batchSize)
 	if err != nil {
