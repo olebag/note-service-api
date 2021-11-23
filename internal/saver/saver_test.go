@@ -59,7 +59,7 @@ func TestSaver(t *testing.T) {
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
 			saverTest, err := NewSaver(1, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.NotNil(t, err)
+			require.Nil(t, err)
 
 			err = saverTest.Init()
 
@@ -83,7 +83,7 @@ func TestSaver(t *testing.T) {
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
 			saverTest, err := NewSaver(2, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.NotNil(t, err)
+			require.Nil(t, err)
 
 			err = saverTest.Init()
 			defer saverTest.Close()
@@ -105,7 +105,7 @@ func TestSaver(t *testing.T) {
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
 			saverTest, err := NewSaver(9, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.NotNil(t, err)
+			require.Nil(t, err)
 
 			err = saverTest.Init()
 			defer saverTest.Close()
