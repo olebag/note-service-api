@@ -42,6 +42,8 @@ func (a *alarmer) Init() error {
 	go func() {
 		ticker := time.NewTicker(a.duration)
 		defer ticker.Stop()
+		defer close(a.end)
+		defer close(a.alarm)
 
 		for {
 			select {
@@ -67,7 +69,5 @@ func (a *alarmer) Alarm() <-chan struct{} {
 }
 
 func (a *alarmer) Close() {
-	defer close(a.end)
-	defer close(a.alarm)
 	a.end <- struct{}{}
 }

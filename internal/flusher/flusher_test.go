@@ -26,13 +26,12 @@ func TestFlusher_Flush(t *testing.T) {
 	})
 
 	t.Run("len input value equal zero", func(t *testing.T) {
-		mockNoteRepo.EXPECT().MultiAdd(make([]api.Note, 0)).Return(int64(0), nil).Times(1)
 		req := make([]api.Note, 0)
-		var expectedRes []api.Note
+		expectedRes := "error input values"
 
-		res, err := noteFlusher.Flush(req, 1)
-		require.Nil(t, err)
-		require.Equal(t, expectedRes, res)
+		_, err := noteFlusher.Flush(req, 1)
+		require.Error(t, err)
+		require.Equal(t, expectedRes, err.Error())
 	})
 
 	t.Run("input one note", func(t *testing.T) {
