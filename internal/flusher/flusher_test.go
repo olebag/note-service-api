@@ -27,7 +27,7 @@ func TestFlusher_Flush(t *testing.T) {
 
 	t.Run("len input value equal zero", func(t *testing.T) {
 		req := make([]api.Note, 0)
-		expectedRes := "error input values"
+		expectedRes := "invalid input values"
 
 		_, err := noteFlusher.Flush(req, 1)
 		require.Error(t, err)
