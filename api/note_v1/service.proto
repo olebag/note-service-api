@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+package api.note_v1;
+
+option go_package = "github.com/scipie28/note-service-api/pkg/note_v1";
+
+service NoteV1 {
+  // Adds a note to the database, giving it a specific Id.
+  rpc CreateNoteV1(CreateNoteV1Request) returns (CreateNoteV1Response) {
+    option (google.api.http) = {
+      post: "/note/v1"
+    };
+  }
+}
+
+message CreateNoteV1Request {
+  int64 user_id = 1;
+  int64 classroom_id = 2;
+  int64 document_id = 3;
+}
+
+message CreateNoteV1Response {
+  int64 note_id = 1;
+}
