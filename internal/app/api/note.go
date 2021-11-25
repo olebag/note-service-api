@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-// Note...
+// Note ...
 type Note struct {
 	Id          int64
 	UserId      int64
@@ -13,7 +13,6 @@ type Note struct {
 }
 
 func (n *Note) String() {
-	fmt.Printf(
-		"Id = %v; UserId = %v; ClasssroomId = %v; DocumentId = %v\n",
+	fmt.Printf("Id = %v; UserId = %v; ClasssroomId = %v; DocumentId = %v\n",
 		n.Id, n.UserId, n.ClassroomId, n.DocumentId)
 }
