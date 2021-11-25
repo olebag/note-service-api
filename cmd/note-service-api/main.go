@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
@@ -26,7 +26,7 @@ func main() {
 
 	fmt.Printf("function opening and closeing file completed\n\n")
 
-	data := []api.Note{
+	data := []model.Note{
 		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 		{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},

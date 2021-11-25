@@ -3,14 +3,14 @@ package flusher
 import (
 	"log"
 
-	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/repo"
 	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
 type Flusher interface {
-	Flush(note []api.Note, batchSize int64) ([]api.Note, error)
+	Flush(note []model.Note, batchSize int64) ([]model.Note, error)
 }
 
 type flusher struct {
@@ -21,7 +21,7 @@ func NewFlusher(repo *mocksRepo.MockRepo) Flusher {
 	return &flusher{repo}
 }
 
-func (f *flusher) Flush(notes []api.Note, batchSize int64) ([]api.Note, error) {
+func (f *flusher) Flush(notes []model.Note, batchSize int64) ([]model.Note, error) {
 	batches, err := utills.SplitSlice(notes, batchSize)
 	if err != nil {
 		log.Printf("failed to spliting slice: %s", err.Error())
@@ -33,7 +33,7 @@ func (f *flusher) Flush(notes []api.Note, batchSize int64) ([]api.Note, error) {
 		if errAdd != nil {
 			log.Printf("failed to adding slice: %s", errAdd.Error())
 
-			var save = make([]api.Note, 0)
+			var save = make([]model.Note, 0)
 			for _, v := range batches[i:] {
 				save = append(save, v...)
 			}

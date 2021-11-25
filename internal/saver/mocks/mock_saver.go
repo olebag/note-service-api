@@ -8,7 +8,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	api "github.com/scipie28/note-service-api/internal/app/api"
+	api "github.com/scipie28/note-service-api/internal/app/model"
 )
 
 // MockSaver is a mock of Saver interface.
