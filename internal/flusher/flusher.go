@@ -31,7 +31,7 @@ func (f *flusher) Flush(notes []api.Note, batchSize int64) ([]api.Note, error) {
 	for i, batch := range batches {
 		num, errAdd := f.repo.MultiAdd(batch)
 		if errAdd != nil {
-			log.Printf("failed to add slice: %s", errAdd.Error())
+			log.Printf("failed to adding slice: %s", errAdd.Error())
 
 			var save = make([]api.Note, 0)
 			for _, v := range batches[i:] {

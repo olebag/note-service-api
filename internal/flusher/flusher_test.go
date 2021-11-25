@@ -18,7 +18,7 @@ func TestFlusher_Flush(t *testing.T) {
 	noteFlusher := NewFlusher(mockNoteRepo)
 
 	t.Run("input value equal nil", func(t *testing.T) {
-		expectedRes := "error input values"
+		expectedRes := "invalid input values"
 
 		_, err := noteFlusher.Flush(nil, 1)
 		require.Error(t, err)

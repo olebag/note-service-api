@@ -32,19 +32,19 @@ type saver struct {
 
 func NewSaver(capacity, batchSize int64, flusher flusher.Flusher, alarmer alarmer.Alarmer, lossAllData bool) (Saver, error) {
 	if flusher == nil {
-		return nil, errors.New("error input value: flusher")
+		return nil, errors.New("invalid flusher")
 	}
 
 	if alarmer == nil {
-		return nil, errors.New("error input value: alarmer")
+		return nil, errors.New("invalid alarmer")
 	}
 
 	if capacity <= 0 {
-		return nil, errors.New("error input value: capacity")
+		return nil, errors.New("invalid capacity")
 	}
 
 	if batchSize <= 0 {
-		return nil, errors.New("error input value: batch size")
+		return nil, errors.New("invalid batch size")
 	}
 
 	return &saver{
@@ -74,6 +74,7 @@ func (s *saver) Init() error {
 		defer close(s.notesChan)
 		defer close(s.end)
 		defer s.alarmer.Close()
+
 		for {
 			select {
 			case note := <-s.notesChan:
@@ -95,7 +96,7 @@ func (s *saver) Init() error {
 
 func (s *saver) Save(note api.Note) error {
 	if !s.isInit {
-		return errors.New("failed to initialized saver")
+		return errors.New("failed to initializing saver")
 	}
 
 	s.notesChan <- note
@@ -124,7 +125,7 @@ func (s *saver) flushData() {
 
 	res, err := s.flusher.Flush(s.notes, s.batchSize)
 	if err != nil {
-		log.Printf("failed to flushed data %s", err.Error())
+		log.Printf("failed to flushing data %s", err.Error())
 	}
 
 	s.notes = s.notes[:copy(s.notes, res)]

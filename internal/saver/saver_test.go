@@ -1,7 +1,7 @@
 package saver
 
 import (
-	"log"
+	"sync"
 	"testing"
 	"time"
 
@@ -17,9 +17,11 @@ func TestSaver(t *testing.T) {
 	var (
 		mockCtrl        = gomock.NewController(t)
 		mockNoteRepo    = mocksRepo.NewMockRepo(mockCtrl)
+		flusher         = flusher.NewFlusher(mockNoteRepo)
 		lossAllDataMode = true
-		noteFlusher     = flusher.NewFlusher(mockNoteRepo)
-		req             = []api.Note{
+		alarmerDuration = 20 * time.Millisecond
+
+		req = []api.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 			{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
@@ -31,45 +33,50 @@ func TestSaver(t *testing.T) {
 		}
 	)
 
-	t.Run("input capacity equal zero", func(t *testing.T) {
-		expectedError := "error input value: capacity"
+	t.Run("capacity equal zero", func(t *testing.T) {
+		expectedError := "invalid capacity"
 
-		alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
+		alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 
-		_, err := NewSaver(0, 3, noteFlusher, alarmerTest, lossAllDataMode)
+		_, err := NewSaver(0, 3, flusher, alarmerTest, lossAllDataMode)
 		require.NotNil(t, err)
 		require.Equal(t, expectedError, err.Error())
 	})
 
-	t.Run("input batch size equal zero", func(t *testing.T) {
-		expectedError := "error input value: batch size"
+	t.Run("batch size equal zero", func(t *testing.T) {
+		expectedError := "invalid batch size"
 
-		alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
+		alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 
-		_, err := NewSaver(3, 0, noteFlusher, alarmerTest, lossAllDataMode)
+		_, err := NewSaver(3, 0, flusher, alarmerTest, lossAllDataMode)
 		require.NotNil(t, err)
 		require.Equal(t, expectedError, err.Error())
 	})
 
 	t.Run("time alarmer less time write in buffer", func(t *testing.T) {
+		var (
+			callsNum = 8
+		)
 
-		t.Run("input capacity equal one", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		t.Run("capacity equal one", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(callsNum)
+
+			wg := sync.WaitGroup{}
+			wg.Add(callsNum)
 
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
-			saverTest, err := NewSaver(1, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.Nil(t, err)
+			saverTest, err := NewSaver(1, 3, flusher, alarmerTest, lossAllDataMode)
+			require.NoError(t, err)
 
 			err = saverTest.Init()
-
+			require.NoError(t, err)
 			defer saverTest.Close()
 
 			for _, val := range req {
-				errReq := saverTest.Save(val)
-				if errReq != nil {
-					log.Printf("failed to save %s", errReq.Error())
-				}
+				errSave := saverTest.Save(val)
+				require.NoError(t, errSave)
+
 				time.Sleep(20 * time.Millisecond)
 
 			}
@@ -77,44 +84,44 @@ func TestSaver(t *testing.T) {
 			require.Nil(t, err)
 		})
 
-		t.Run("input capacity less slice notes", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		t.Run("capacity less slice notes len", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(callsNum)
 
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
-			saverTest, err := NewSaver(2, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.Nil(t, err)
+			saverTest, err := NewSaver(2, 3, flusher, alarmerTest, lossAllDataMode)
+			require.NoError(t, err)
 
 			err = saverTest.Init()
+			require.NoError(t, err)
 			defer saverTest.Close()
 
 			for _, val := range req {
-				errReq := saverTest.Save(val)
-				if errReq != nil {
-					log.Printf("failed to save: %s", errReq.Error())
-				}
+				errSave := saverTest.Save(val)
+				require.NoError(t, errSave)
+
 				time.Sleep(20 * time.Millisecond)
 			}
 
 			require.Nil(t, err)
 		})
 
-		t.Run("input capacity more slice notes", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+		t.Run("capacity more slice notes len", func(t *testing.T) {
+			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(callsNum)
 
 			alarmerTest, _ := alarmer.NewAlarmer(5 * time.Millisecond)
 
-			saverTest, err := NewSaver(9, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.Nil(t, err)
+			saverTest, err := NewSaver(9, 3, flusher, alarmerTest, lossAllDataMode)
+			require.NoError(t, err)
 
 			err = saverTest.Init()
+			require.NoError(t, err)
 			defer saverTest.Close()
 
 			for _, val := range req {
-				errReq := saverTest.Save(val)
-				if errReq != nil {
-					log.Printf("failed to save: %s", errReq.Error())
-				}
+				errSave := saverTest.Save(val)
+				require.NoError(t, errSave)
+
 				time.Sleep(20 * time.Millisecond)
 			}
 
@@ -122,165 +129,231 @@ func TestSaver(t *testing.T) {
 		})
 	})
 
-	t.Run("time write in buffer less time alarmer", func(t *testing.T) {
-		t.Run("input capacity equal one", func(t *testing.T) {
-			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//t.Run("time write in buffer less time alarmer", func(t *testing.T) {
+	//	t.Run("capacity equal one", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
+	//
+	//		saverTest, err := NewSaver(1, 3, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(5 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//
+	//	t.Run("capacity less slice notes len", func(t *testing.T) {
+	//		t.Run("batch size equal capacity", func(t *testing.T) {
+	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//
+	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
+	//
+	//			saverTest, err := NewSaver(6, 6, flusher, alarmerTest, lossAllDataMode)
+	//			require.NoError(t, err)
+	//
+	//			err = saverTest.Init()
+	//			require.NoError(t, err)
+	//			defer saverTest.Close()
+	//
+	//			for _, val := range req {
+	//				errSave := saverTest.Save(val)
+	//				require.NoError(t, errSave)
+	//
+	//				time.Sleep(5 * time.Millisecond)
+	//			}
+	//
+	//			require.Nil(t, err)
+	//		})
+	//
+	//		t.Run("batch size less capacity", func(t *testing.T) {
+	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(5)
+	//
+	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
+	//
+	//			saverTest, err := NewSaver(6, 2, flusher, alarmerTest, lossAllDataMode)
+	//			require.NoError(t, err)
+	//
+	//			err = saverTest.Init()
+	//			require.NoError(t, err)
+	//			defer saverTest.Close()
+	//
+	//			for _, val := range req {
+	//				errSave := saverTest.Save(val)
+	//				require.NoError(t, errSave)
+	//
+	//				time.Sleep(5 * time.Millisecond)
+	//			}
+	//
+	//			require.Nil(t, err)
+	//		})
+	//
+	//		t.Run("batch size more capacity", func(t *testing.T) {
+	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//
+	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
+	//
+	//			saverTest, err := NewSaver(2, 6, flusher, alarmerTest, lossAllDataMode)
+	//			require.NoError(t, err)
+	//
+	//			err = saverTest.Init()
+	//			require.NoError(t, err)
+	//			defer saverTest.Close()
+	//
+	//			for _, val := range req {
+	//				errSave := saverTest.Save(val)
+	//				require.NoError(t, errSave)
+	//
+	//				time.Sleep(5 * time.Millisecond)
+	//			}
+	//
+	//			require.Nil(t, err)
+	//		})
+	//	})
+	//})
 
-			alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
+	//t.Run("capacity more slice notes len", func(t *testing.T) {
+	//	t.Run("batch size equal capacity", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(9, 9, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(5 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//
+	//	t.Run("batch size less capacity", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(9, 4, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(5 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//
+	//	t.Run("batch size more capacity", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(9, 14, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(5 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//})
 
-			saverTest, err := NewSaver(1, 3, noteFlusher, alarmerTest, lossAllDataMode)
-			require.Nil(t, err)
-
-			err = saverTest.Init()
-			defer saverTest.Close()
-
-			for _, val := range req {
-				errReq := saverTest.Save(val)
-				if errReq != nil {
-					log.Printf("failed to save: %s", errReq.Error())
-				}
-				time.Sleep(5 * time.Millisecond)
-			}
-
-			require.Nil(t, err)
-		})
-
-		t.Run("capacity less slice notes", func(t *testing.T) {
-			t.Run("input batch size equal capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
-
-				alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
-
-				saverTest, err := NewSaver(6, 6, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-
-			t.Run("input batch size less capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(4)
-
-				alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
-
-				saverTest, err := NewSaver(6, 2, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-
-			t.Run("input batch size more capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
-
-				alarmerTest, _ := alarmer.NewAlarmer(20 * time.Millisecond)
-
-				saverTest, err := NewSaver(2, 6, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-		})
-
-		t.Run("capacity more slice notes", func(t *testing.T) {
-			t.Run("input batch size equal capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
-
-				alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
-
-				saverTest, err := NewSaver(9, 9, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-
-			t.Run("input batch size less capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
-
-				alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
-
-				saverTest, err := NewSaver(9, 4, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-
-			t.Run("input batch size more capacity", func(t *testing.T) {
-				mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
-
-				alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
-
-				saverTest, err := NewSaver(9, 14, noteFlusher, alarmerTest, lossAllDataMode)
-				require.Nil(t, err)
-
-				err = saverTest.Init()
-				defer saverTest.Close()
-
-				for _, val := range req {
-					errReq := saverTest.Save(val)
-					if errReq != nil {
-						log.Printf("failed to save: %s", errReq.Error())
-					}
-					time.Sleep(5 * time.Millisecond)
-				}
-
-				require.Nil(t, err)
-			})
-		})
-	})
-
+	//t.Run("time alarmer equal time write in buffer", func(t *testing.T) {
+	//	t.Run("capacity equal one", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(1, 3, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(10 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//
+	//	t.Run("capacity more slice notes len", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(9, 6, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(10 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//
+	//	t.Run("capacity less slice notes len", func(t *testing.T) {
+	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//
+	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
+	//
+	//		saverTest, err := NewSaver(3, 2, flusher, alarmerTest, lossAllDataMode)
+	//		require.NoError(t, err)
+	//
+	//		err = saverTest.Init()
+	//		require.NoError(t, err)
+	//		defer saverTest.Close()
+	//
+	//		for _, val := range req {
+	//			errSave := saverTest.Save(val)
+	//			require.NoError(t, errSave)
+	//
+	//			time.Sleep(10 * time.Millisecond)
+	//		}
+	//
+	//		require.Nil(t, err)
+	//	})
+	//})
 }

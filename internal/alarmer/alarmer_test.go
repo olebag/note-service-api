@@ -5,25 +5,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAlarmer(t *testing.T) {
-	t.Run("input duration more zero", func(t *testing.T) {
+	t.Run("duration value more zero", func(t *testing.T) {
 		maxRes := 6
 		minRes := 4
 		num := 0
 
 		alarmerTest, err := NewAlarmer(1 * time.Second)
-		if err != nil {
-			log.Printf("failed to crating new alarmer")
-		}
+		require.NoError(t, err)
 
 		err = alarmerTest.Init()
-		if err != nil {
-			log.Printf("failed to initialize alarmer")
-		}
+		require.NoError(t, err)
 
 		timer := time.NewTimer(5 * time.Second)
 		wg := sync.WaitGroup{}
@@ -52,20 +47,18 @@ func TestAlarmer(t *testing.T) {
 		require.True(t, success)
 	})
 
-	t.Run("input duration equal zero", func(t *testing.T) {
-		expectedErr := "error input value: duration"
+	t.Run("duration value equal zero", func(t *testing.T) {
+		expectedErr := "invalid duration"
 
 		_, err := NewAlarmer(0 * time.Second)
-
 		require.NotNil(t, err)
 		require.Equal(t, expectedErr, err.Error())
 	})
 
-	t.Run("input duration less zero", func(t *testing.T) {
-		expectedErr := "error input value: duration"
+	t.Run("duration value less zero", func(t *testing.T) {
+		expectedErr := "invalid duration"
 
 		_, err := NewAlarmer(-5 * time.Second)
-
 		require.NotNil(t, err)
 		require.Equal(t, expectedErr, err.Error())
 	})
