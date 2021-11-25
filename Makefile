@@ -2,14 +2,14 @@ PHONY: generate
 generate:
 		mkdir -p swagger
 		mkdir -p pkg/note_v1
-		protoc -I vendor.protogen \
+		protoc --proto_path vendor.protogen --proto_path api/note_v1 \
 				--go_out=pkg/note_v1 --go_opt=paths=import \
 				--go-grpc_out=pkg/note_v1 --go-grpc_opt=paths=import \
 				--grpc-gateway_out=pkg/note_v1 \
 				--grpc-gateway_opt=logtostderr=true \
 				--grpc-gateway_opt=paths=import \
 				--validate_out lang=go:pkg/note_v1 \
-				--swagger_out=allow_merge=true,merge_file_name=api:swagger \
+				--swagger_out=allow_merge=true,merge_file_name=api:pkg/note_v1 \
 				api/note_v1/service.proto
 		mv pkg/note_v1/github.com/scipie28/note-service-api/pkg/note_v1/* pkg/note_v1/
 		rm -rf pkg/note_v1/github.com
