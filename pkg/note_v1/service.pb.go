@@ -175,12 +175,12 @@ func file_service_proto_rawDescGZIP() []byte {
 
 var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_service_proto_goTypes = []interface{}{
-	(*CreateNoteV1Request)(nil),  // 0: api.note.CreateNoteV1Request
-	(*CreateNoteV1Response)(nil), // 1: api.note.CreateNoteV1Response
+	(*CreateNoteV1Request)(nil),  // 0: api.note_v1.CreateNoteV1Request
+	(*CreateNoteV1Response)(nil), // 1: api.note_v1.CreateNoteV1Response
 }
 var file_service_proto_depIdxs = []int32{
-	0, // 0: api.note.NoteV1.CreateNoteV1:input_type -> api.note.CreateNoteV1Request
-	1, // 1: api.note.NoteV1.CreateNoteV1:output_type -> api.note.CreateNoteV1Response
+	0, // 0: api.note_v1.NoteV1.CreateNoteV1:input_type -> api.note_v1.CreateNoteV1Request
+	1, // 1: api.note_v1.NoteV1.CreateNoteV1:output_type -> api.note_v1.CreateNoteV1Response
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

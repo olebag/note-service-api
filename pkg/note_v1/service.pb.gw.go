@@ -2,7 +2,7 @@
 // source: service.proto
 
 /*
-Package note is a reverse proxy.
+Package note_v1 is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */

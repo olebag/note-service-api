@@ -32,7 +32,7 @@ func NewNoteV1Client(cc grpc.ClientConnInterface) NoteV1Client {
 
 func (c *noteV1Client) CreateNoteV1(ctx context.Context, in *CreateNoteV1Request, opts ...grpc.CallOption) (*CreateNoteV1Response, error) {
 	out := new(CreateNoteV1Response)
-	err := c.cc.Invoke(ctx, "/api.note.NoteV1/CreateNoteV1", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/CreateNoteV1", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func _NoteV1_CreateNoteV1_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note.NoteV1/CreateNoteV1",
+		FullMethod: "/api.note_v1.NoteV1/CreateNoteV1",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).CreateNoteV1(ctx, req.(*CreateNoteV1Request))
@@ -90,7 +90,7 @@ func _NoteV1_CreateNoteV1_Handler(srv interface{}, ctx context.Context, dec func
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NoteV1_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.note.NoteV1",
+	ServiceName: "api.note_v1.NoteV1",
 	HandlerType: (*NoteV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
