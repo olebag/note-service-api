@@ -5,7 +5,6 @@ import (
 
 	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/repo"
-	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 
@@ -17,7 +16,7 @@ type flusher struct {
 	repo repo.Repo
 }
 
-func NewFlusher(repo *mocksRepo.MockRepo) Flusher {
+func NewFlusher(repo repo.Repo) Flusher {
 	return &flusher{repo}
 }
 

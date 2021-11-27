@@ -1,6 +1,5 @@
 PHONY: generate
 generate:
-		mkdir -p swagger
 		mkdir -p pkg/note_v1
 		protoc --proto_path vendor.protogen --proto_path api/note_v1 \
 				--go_out=pkg/note_v1 --go_opt=paths=import \
