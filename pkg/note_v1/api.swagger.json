@@ -13,7 +13,6 @@
   "paths": {
     "/note/v1": {
       "post": {
-        "summary": "Adds a note to the database, giving it a specific Id.",
         "operationId": "NoteV1_CreateNoteV1",
         "responses": {
           "200": {

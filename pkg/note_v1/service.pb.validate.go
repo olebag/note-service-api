@@ -11,6 +11,7 @@ import (
 	"net/mail"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 	"unicode/utf8"
@@ -31,15 +32,30 @@ var (
 	_ = (*url.URL)(nil)
 	_ = (*mail.Address)(nil)
 	_ = anypb.Any{}
+	_ = sort.Sort
 )
 
 // Validate checks the field values on CreateNoteV1Request with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CreateNoteV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateNoteV1RequestMultiError, or nil if none found.
+func (m *CreateNoteV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateNoteV1Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
+
+	var errors []error
 
 	// no validation rules for UserId
 
@@ -47,8 +63,28 @@ func (m *CreateNoteV1Request) Validate() error {
 
 	// no validation rules for DocumentId
 
+	if len(errors) > 0 {
+		return CreateNoteV1RequestMultiError(errors)
+	}
 	return nil
 }
+
+// CreateNoteV1RequestMultiError is an error wrapping multiple validation
+// errors returned by CreateNoteV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type CreateNoteV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateNoteV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateNoteV1RequestMultiError) AllErrors() []error { return m }
 
 // CreateNoteV1RequestValidationError is the validation error returned by
 // CreateNoteV1Request.Validate if the designated constraints aren't met.
@@ -108,16 +144,50 @@ var _ interface {
 
 // Validate checks the field values on CreateNoteV1Response with the rules
 // defined in the proto definition for this message. If any rules are
-// violated, an error is returned.
+// violated, the first error encountered is returned, or nil if there are no violations.
 func (m *CreateNoteV1Response) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on CreateNoteV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// CreateNoteV1ResponseMultiError, or nil if none found.
+func (m *CreateNoteV1Response) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *CreateNoteV1Response) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
 
+	var errors []error
+
 	// no validation rules for NoteId
 
+	if len(errors) > 0 {
+		return CreateNoteV1ResponseMultiError(errors)
+	}
 	return nil
 }
+
+// CreateNoteV1ResponseMultiError is an error wrapping multiple validation
+// errors returned by CreateNoteV1Response.ValidateAll() if the designated
+// constraints aren't met.
+type CreateNoteV1ResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m CreateNoteV1ResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m CreateNoteV1ResponseMultiError) AllErrors() []error { return m }
 
 // CreateNoteV1ResponseValidationError is the validation error returned by
 // CreateNoteV1Response.Validate if the designated constraints aren't met.

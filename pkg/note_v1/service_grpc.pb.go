@@ -18,7 +18,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NoteV1Client interface {
-	// Adds a note to the database, giving it a specific Id.
 	CreateNoteV1(ctx context.Context, in *CreateNoteV1Request, opts ...grpc.CallOption) (*CreateNoteV1Response, error)
 }
 
@@ -43,7 +42,6 @@ func (c *noteV1Client) CreateNoteV1(ctx context.Context, in *CreateNoteV1Request
 // All implementations must embed UnimplementedNoteV1Server
 // for forward compatibility
 type NoteV1Server interface {
-	// Adds a note to the database, giving it a specific Id.
 	CreateNoteV1(context.Context, *CreateNoteV1Request) (*CreateNoteV1Response, error)
 	mustEmbedUnimplementedNoteV1Server()
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func (n *Note) CreateNoteV1(ctx context.Context, req *pb.CreateNoteV1Request) (*pb.CreateNoteV1Response, error) {
-	id, err := n.noteService.CreateNote(ctx, &model.Note{
+	id, err := n.NoteService.CreateNote(ctx, &model.Note{
 		UserId:      req.GetUserId(),
 		ClassroomId: req.GetClassroomId(),
 		DocumentId:  req.GetDocumentId(),

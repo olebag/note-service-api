@@ -8,6 +8,5 @@ import (
 type Note struct {
 	desc.UnimplementedNoteV1Server
 
-	noteService note.INote
+	NoteService note.INote
 }
-
