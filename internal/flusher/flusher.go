@@ -28,7 +28,7 @@ func (f *flusher) Flush(notes []model.Note, batchSize int64) ([]model.Note, erro
 	}
 
 	for i, batch := range batches {
-		num, errAdd := f.repo.MultiAdd(batch)
+		num, errAdd := f.repo.MultiAddNotes(batch)
 		if errAdd != nil {
 			log.Printf("failed to adding slice: %s", errAdd.Error())
 

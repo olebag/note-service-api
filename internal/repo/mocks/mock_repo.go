@@ -35,9 +35,9 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 }
 
 // Add mocks base method.
-func (m *MockRepo) Add(arg0 api.Note) error {
+func (m *MockRepo) AddNtoe(arg0 api.Note) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Add", arg0)
+	ret := m.ctrl.Call(m, "AddNtoe", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -45,13 +45,13 @@ func (m *MockRepo) Add(arg0 api.Note) error {
 // Add indicates an expected call of Add.
 func (mr *MockRepoMockRecorder) Add(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockRepo)(nil).Add), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddNtoe", reflect.TypeOf((*MockRepo)(nil).AddNtoe), arg0)
 }
 
 // Describe mocks base method.
-func (m *MockRepo) Describe(arg0 int64) (api.Note, error) {
+func (m *MockRepo) DescribeNote(arg0 int64) (api.Note, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Describe", arg0)
+	ret := m.ctrl.Call(m, "DescribeNote", arg0)
 	ret0, _ := ret[0].(api.Note)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -60,13 +60,13 @@ func (m *MockRepo) Describe(arg0 int64) (api.Note, error) {
 // Describe indicates an expected call of Describe.
 func (mr *MockRepoMockRecorder) Describe(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Describe", reflect.TypeOf((*MockRepo)(nil).Describe), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeNote", reflect.TypeOf((*MockRepo)(nil).DescribeNote), arg0)
 }
 
 // MultiAdd mocks base method.
-func (m *MockRepo) MultiAdd(arg0 []api.Note) (int64, error) {
+func (m *MockRepo) MultiAddNotes(arg0 []api.Note) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MultiAdd", arg0)
+	ret := m.ctrl.Call(m, "MultiAddNotes", arg0)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
@@ -75,13 +75,13 @@ func (m *MockRepo) MultiAdd(arg0 []api.Note) (int64, error) {
 // MultiAdd indicates an expected call of MultiAdd.
 func (mr *MockRepoMockRecorder) MultiAdd(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiAdd", reflect.TypeOf((*MockRepo)(nil).MultiAdd), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiAddNotes", reflect.TypeOf((*MockRepo)(nil).MultiAddNotes), arg0)
 }
 
 // Remove mocks base method.
-func (m *MockRepo) Remove(arg0 int64) error {
+func (m *MockRepo) RemoveNote(arg0 int64) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Remove", arg0)
+	ret := m.ctrl.Call(m, "RemoveNote", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -89,13 +89,13 @@ func (m *MockRepo) Remove(arg0 int64) error {
 // Remove indicates an expected call of Remove.
 func (mr *MockRepoMockRecorder) Remove(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockRepo)(nil).Remove), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveNote", reflect.TypeOf((*MockRepo)(nil).RemoveNote), arg0)
 }
 
 // Update mocks base method.
-func (m *MockRepo) Update(arg0 int64, arg1 api.Note) error {
+func (m *MockRepo) UpdateNote(arg0 int64, arg1 api.Note) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", arg0, arg1)
+	ret := m.ctrl.Call(m, "UpdateNote", arg0, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -103,5 +103,5 @@ func (m *MockRepo) Update(arg0 int64, arg1 api.Note) error {
 // Update indicates an expected call of Update.
 func (mr *MockRepoMockRecorder) Update(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRepo)(nil).Update), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateNote", reflect.TypeOf((*MockRepo)(nil).UpdateNote), arg0, arg1)
 }

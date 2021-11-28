@@ -11,24 +11,28 @@ service NoteV1 {
   rpc AddNoteV1(AddNoteV1Request) returns (AddNoteV1Response) {
     option (google.api.http) = {
       post: "/note/v1/add"
+      body: "*"
     };
   }
 
   rpc RemoveNoteV1(RemoveNoteV1Request) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/note/v1/remove"
+      body: "*"
     };
   }
 
   rpc UpdateNoteV1(UpdateNoteV1Request) returns (google.protobuf.Empty){
     option (google.api.http) = {
       post: "/note/v1/update"
+      body: "*"
     };
   }
 
   rpc DescribeNoteV1(DescribeNoteV1Request) returns (DescribeNoteV1Response){
     option (google.api.http) = {
       post: "/note/v1/describe"
+      body: "*"
     };
   }
 
@@ -60,7 +64,8 @@ message DescribeNoteV1Request{
 }
 
 message DescribeNoteV1Response{
-  int64 user_id = 1;
-  int64 classroom_id = 2;
-  int64 document_id = 3;
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 classroom_id = 3;
+  int64 document_id = 4;
 }

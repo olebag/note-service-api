@@ -5,7 +5,8 @@ import (
 	"fmt"
 )
 
-func (n *note) Remove(ctx context.Context, id int64) error {
-	fmt.Printf("Note with id %v removing", id)
+func (n *note) RemoveNote(ctx context.Context, id int64) error {
+	fmt.Printf("note with id %v deleted", id)
+
 	return nil
 }

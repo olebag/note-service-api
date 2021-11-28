@@ -3,11 +3,12 @@ package note
 import (
 	"context"
 	"fmt"
+
 	"github.com/scipie28/note-service-api/internal/app/model"
 )
 
-func (n *note) Describe(ctx context.Context, id int64) (*model.Note, error) {
-	fmt.Printf("Printing note with id %v", id)
+func (n *note) DescribeNote(ctx context.Context, id int64) (*model.Note, error) {
+	fmt.Printf("description of note with id: %v", id)
 
 	return &model.Note{
 		Id:          33,

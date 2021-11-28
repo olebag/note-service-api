@@ -28,6 +28,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1AddNoteV1Request"
+            }
+          }
+        ],
         "tags": [
           "NoteV1"
         ]
@@ -50,6 +60,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1DescribeNoteV1Request"
+            }
+          }
+        ],
         "tags": [
           "NoteV1"
         ]
@@ -72,6 +92,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1RemoveNoteV1Request"
+            }
+          }
+        ],
         "tags": [
           "NoteV1"
         ]
@@ -94,6 +124,16 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1UpdateNoteV1Request"
+            }
+          }
+        ],
         "tags": [
           "NoteV1"
         ]
@@ -101,6 +141,23 @@
     }
   },
   "definitions": {
+    "note_v1AddNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "classroom_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "document_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "note_v1AddNoteV1Response": {
       "type": "object",
       "properties": {
@@ -110,9 +167,52 @@
         }
       }
     },
+    "note_v1DescribeNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
     "note_v1DescribeNoteV1Response": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "classroom_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "document_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1RemoveNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1UpdateNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "user_id": {
           "type": "string",
           "format": "int64"

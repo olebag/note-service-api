@@ -1,12 +1,13 @@
 package main
 
 import (
+	"log"
+	"net"
+
 	"github.com/scipie28/note-service-api/internal/app/api/note_v1"
 	"github.com/scipie28/note-service-api/internal/app/service/note"
 	pb "github.com/scipie28/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
-	"log"
-	"net"
 )
 
 const port = ":50051"

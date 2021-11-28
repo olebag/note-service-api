@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+
 	pb "github.com/scipie28/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
-	"log"
 )
 
 const address = "localhost:50051"
@@ -32,18 +33,19 @@ func main() {
 		DocumentId:  3,
 	})
 	if err != nil {
-		log.Fatalf("failid to adding: %s", err.Error())
+		log.Fatalf("failed to adding: %s", err.Error())
 	}
 
-	fmt.Printf("Method Add. Id response: %s\n\n", resAdd)
+	fmt.Printf("added note with id: %s\n\n", resAdd)
 
-	resDescr, err := client.DescribeNoteV1(ctx, &pb.DescribeNoteV1Request{Id: 333})
+	desc, err := client.DescribeNoteV1(ctx, &pb.DescribeNoteV1Request{Id: 333})
 	if err != nil {
-		log.Fatalf("failid to describing: %s", err.Error())
+		log.Fatalf("failed to describing: %s", err.Error())
 	}
-	fmt.Printf("Method Describe. Respone: %v\n\n", resDescr)
 
-	resUpd, err := client.UpdateNoteV1(ctx, &pb.UpdateNoteV1Request{
+	fmt.Printf("description of note with id: %v\n\n", desc)
+
+	upd, err := client.UpdateNoteV1(ctx, &pb.UpdateNoteV1Request{
 		Id:          999,
 		UserId:      9999,
 		ClassroomId: 99999,
@@ -53,7 +55,7 @@ func main() {
 		log.Fatalf("failid to updating: %s", err.Error())
 	}
 
-	fmt.Printf("Method Update. Response: %v\n\n", resUpd)
+	fmt.Printf("note with id %v updated\n\n", upd)
 
 	resRem, err := client.RemoveNoteV1(ctx, &pb.RemoveNoteV1Request{
 		Id: 123,
@@ -62,6 +64,5 @@ func main() {
 		log.Fatalf("failid to removing: %s", err.Error())
 	}
 
-	fmt.Printf("Method Remove. Respone: %v\n\n", resRem)
-
+	fmt.Printf("note with id %v deleted\n\n", resRem)
 }
