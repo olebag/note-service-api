@@ -5,7 +5,7 @@ import (
 	pb "github.com/scipie28/note-service-api/pkg/note_v1"
 )
 
-func (n *Note) DescribeV1(ctx context.Context, req *pb.DescribeNoteV1Request) (res *pb.DescribeNoteV1Response, err error) {
+func (n *Note) DescribeV1(ctx context.Context, req *pb.DescribeNoteV1Request) (*pb.DescribeNoteV1Response, error) {
 	note, err := n.NoteService.Describe(ctx, req.GetId())
 	if err != nil {
 		return nil, err
