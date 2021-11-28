@@ -26,25 +26,40 @@ func main() {
 
 	client := pb.NewNoteV1Client(con)
 
-	resAdd, _ := client.AddNoteV1(ctx, &pb.AddNoteV1Request{
+	resAdd, err := client.AddNoteV1(ctx, &pb.AddNoteV1Request{
 		UserId:      1,
 		ClassroomId: 2,
 		DocumentId:  3,
 	})
+	if err != nil {
+		log.Fatalf("failid to adding: %s", err.Error())
+	}
+
 	fmt.Printf("Method Add. Id response: %s\n\n", resAdd)
 
-	resRem, _ := client.RemoveNoteV1(ctx, &pb.RemoveNoteV1Request{Id: 123})
+	resRem, err := client.RemoveNoteV1(ctx, &pb.RemoveNoteV1Request{Id: 123})
+	if err != nil {
+		log.Fatalf("failid to removing: %s", err.Error())
+	}
+
 	fmt.Printf("Method Remove. Respone: %v\n\n", resRem)
 
-	resDescr, _ := client.DescribeNoteV1(ctx, &pb.DescribeNoteV1Request{Id: 333})
+	resDescr, err := client.DescribeNoteV1(ctx, &pb.DescribeNoteV1Request{Id: 333})
+	if err != nil {
+		log.Fatalf("failid to describing: %s", err.Error())
+	}
 	fmt.Printf("Method Describe. Respone: %v\n\n", resDescr)
 
-	resUpd, _ := client.UpdateNoteV1(ctx, &pb.UpdateNoteV1Request{
+	resUpd, err := client.UpdateNoteV1(ctx, &pb.UpdateNoteV1Request{
 		Id:          999,
 		UserId:      9999,
 		ClassroomId: 99999,
 		DocumentId:  999999,
 	})
+	if err != nil {
+		log.Fatalf("failid to updating: %s", err.Error())
+	}
+
 	fmt.Printf("Method Update. Response: %v\n\n", resUpd)
 
 }
