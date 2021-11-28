@@ -37,13 +37,6 @@ func main() {
 
 	fmt.Printf("Method Add. Id response: %s\n\n", resAdd)
 
-	resRem, err := client.RemoveNoteV1(ctx, &pb.RemoveNoteV1Request{Id: 123})
-	if err != nil {
-		log.Fatalf("failid to removing: %s", err.Error())
-	}
-
-	fmt.Printf("Method Remove. Respone: %v\n\n", resRem)
-
 	resDescr, err := client.DescribeNoteV1(ctx, &pb.DescribeNoteV1Request{Id: 333})
 	if err != nil {
 		log.Fatalf("failid to describing: %s", err.Error())
@@ -61,5 +54,14 @@ func main() {
 	}
 
 	fmt.Printf("Method Update. Response: %v\n\n", resUpd)
+
+	resRem, err := client.RemoveNoteV1(ctx, &pb.RemoveNoteV1Request{
+		Id: 123,
+	})
+	if err != nil {
+		log.Fatalf("failid to removing: %s", err.Error())
+	}
+
+	fmt.Printf("Method Remove. Respone: %v\n\n", resRem)
 
 }
