@@ -35,22 +35,22 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on CreateNoteV1Request with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateNoteV1Request) Validate() error {
+// Validate checks the field values on AddNoteV1Request with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *AddNoteV1Request) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CreateNoteV1Request with the rules
+// ValidateAll checks the field values on AddNoteV1Request with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CreateNoteV1RequestMultiError, or nil if none found.
-func (m *CreateNoteV1Request) ValidateAll() error {
+// AddNoteV1RequestMultiError, or nil if none found.
+func (m *AddNoteV1Request) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CreateNoteV1Request) validate(all bool) error {
+func (m *AddNoteV1Request) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -64,18 +64,18 @@ func (m *CreateNoteV1Request) validate(all bool) error {
 	// no validation rules for DocumentId
 
 	if len(errors) > 0 {
-		return CreateNoteV1RequestMultiError(errors)
+		return AddNoteV1RequestMultiError(errors)
 	}
 	return nil
 }
 
-// CreateNoteV1RequestMultiError is an error wrapping multiple validation
-// errors returned by CreateNoteV1Request.ValidateAll() if the designated
-// constraints aren't met.
-type CreateNoteV1RequestMultiError []error
+// AddNoteV1RequestMultiError is an error wrapping multiple validation errors
+// returned by AddNoteV1Request.ValidateAll() if the designated constraints
+// aren't met.
+type AddNoteV1RequestMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CreateNoteV1RequestMultiError) Error() string {
+func (m AddNoteV1RequestMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -84,11 +84,11 @@ func (m CreateNoteV1RequestMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CreateNoteV1RequestMultiError) AllErrors() []error { return m }
+func (m AddNoteV1RequestMultiError) AllErrors() []error { return m }
 
-// CreateNoteV1RequestValidationError is the validation error returned by
-// CreateNoteV1Request.Validate if the designated constraints aren't met.
-type CreateNoteV1RequestValidationError struct {
+// AddNoteV1RequestValidationError is the validation error returned by
+// AddNoteV1Request.Validate if the designated constraints aren't met.
+type AddNoteV1RequestValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -96,24 +96,22 @@ type CreateNoteV1RequestValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateNoteV1RequestValidationError) Field() string { return e.field }
+func (e AddNoteV1RequestValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateNoteV1RequestValidationError) Reason() string { return e.reason }
+func (e AddNoteV1RequestValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateNoteV1RequestValidationError) Cause() error { return e.cause }
+func (e AddNoteV1RequestValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateNoteV1RequestValidationError) Key() bool { return e.key }
+func (e AddNoteV1RequestValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateNoteV1RequestValidationError) ErrorName() string {
-	return "CreateNoteV1RequestValidationError"
-}
+func (e AddNoteV1RequestValidationError) ErrorName() string { return "AddNoteV1RequestValidationError" }
 
 // Error satisfies the builtin error interface
-func (e CreateNoteV1RequestValidationError) Error() string {
+func (e AddNoteV1RequestValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -125,14 +123,14 @@ func (e CreateNoteV1RequestValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateNoteV1Request.%s: %s%s",
+		"invalid %sAddNoteV1Request.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateNoteV1RequestValidationError{}
+var _ error = AddNoteV1RequestValidationError{}
 
 var _ interface {
 	Field() string
@@ -140,24 +138,24 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateNoteV1RequestValidationError{}
+} = AddNoteV1RequestValidationError{}
 
-// Validate checks the field values on CreateNoteV1Response with the rules
-// defined in the proto definition for this message. If any rules are
-// violated, the first error encountered is returned, or nil if there are no violations.
-func (m *CreateNoteV1Response) Validate() error {
+// Validate checks the field values on AddNoteV1Response with the rules defined
+// in the proto definition for this message. If any rules are violated, the
+// first error encountered is returned, or nil if there are no violations.
+func (m *AddNoteV1Response) Validate() error {
 	return m.validate(false)
 }
 
-// ValidateAll checks the field values on CreateNoteV1Response with the rules
+// ValidateAll checks the field values on AddNoteV1Response with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the result is a list of violation errors wrapped in
-// CreateNoteV1ResponseMultiError, or nil if none found.
-func (m *CreateNoteV1Response) ValidateAll() error {
+// AddNoteV1ResponseMultiError, or nil if none found.
+func (m *AddNoteV1Response) ValidateAll() error {
 	return m.validate(true)
 }
 
-func (m *CreateNoteV1Response) validate(all bool) error {
+func (m *AddNoteV1Response) validate(all bool) error {
 	if m == nil {
 		return nil
 	}
@@ -167,18 +165,18 @@ func (m *CreateNoteV1Response) validate(all bool) error {
 	// no validation rules for NoteId
 
 	if len(errors) > 0 {
-		return CreateNoteV1ResponseMultiError(errors)
+		return AddNoteV1ResponseMultiError(errors)
 	}
 	return nil
 }
 
-// CreateNoteV1ResponseMultiError is an error wrapping multiple validation
-// errors returned by CreateNoteV1Response.ValidateAll() if the designated
-// constraints aren't met.
-type CreateNoteV1ResponseMultiError []error
+// AddNoteV1ResponseMultiError is an error wrapping multiple validation errors
+// returned by AddNoteV1Response.ValidateAll() if the designated constraints
+// aren't met.
+type AddNoteV1ResponseMultiError []error
 
 // Error returns a concatenation of all the error messages it wraps.
-func (m CreateNoteV1ResponseMultiError) Error() string {
+func (m AddNoteV1ResponseMultiError) Error() string {
 	var msgs []string
 	for _, err := range m {
 		msgs = append(msgs, err.Error())
@@ -187,11 +185,11 @@ func (m CreateNoteV1ResponseMultiError) Error() string {
 }
 
 // AllErrors returns a list of validation violation errors.
-func (m CreateNoteV1ResponseMultiError) AllErrors() []error { return m }
+func (m AddNoteV1ResponseMultiError) AllErrors() []error { return m }
 
-// CreateNoteV1ResponseValidationError is the validation error returned by
-// CreateNoteV1Response.Validate if the designated constraints aren't met.
-type CreateNoteV1ResponseValidationError struct {
+// AddNoteV1ResponseValidationError is the validation error returned by
+// AddNoteV1Response.Validate if the designated constraints aren't met.
+type AddNoteV1ResponseValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -199,24 +197,24 @@ type CreateNoteV1ResponseValidationError struct {
 }
 
 // Field function returns field value.
-func (e CreateNoteV1ResponseValidationError) Field() string { return e.field }
+func (e AddNoteV1ResponseValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e CreateNoteV1ResponseValidationError) Reason() string { return e.reason }
+func (e AddNoteV1ResponseValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e CreateNoteV1ResponseValidationError) Cause() error { return e.cause }
+func (e AddNoteV1ResponseValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e CreateNoteV1ResponseValidationError) Key() bool { return e.key }
+func (e AddNoteV1ResponseValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e CreateNoteV1ResponseValidationError) ErrorName() string {
-	return "CreateNoteV1ResponseValidationError"
+func (e AddNoteV1ResponseValidationError) ErrorName() string {
+	return "AddNoteV1ResponseValidationError"
 }
 
 // Error satisfies the builtin error interface
-func (e CreateNoteV1ResponseValidationError) Error() string {
+func (e AddNoteV1ResponseValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -228,14 +226,14 @@ func (e CreateNoteV1ResponseValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sCreateNoteV1Response.%s: %s%s",
+		"invalid %sAddNoteV1Response.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = CreateNoteV1ResponseValidationError{}
+var _ error = AddNoteV1ResponseValidationError{}
 
 var _ interface {
 	Field() string
@@ -243,4 +241,426 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = CreateNoteV1ResponseValidationError{}
+} = AddNoteV1ResponseValidationError{}
+
+// Validate checks the field values on RemoveNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *RemoveNoteV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on RemoveNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// RemoveNoteV1RequestMultiError, or nil if none found.
+func (m *RemoveNoteV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *RemoveNoteV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return RemoveNoteV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// RemoveNoteV1RequestMultiError is an error wrapping multiple validation
+// errors returned by RemoveNoteV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type RemoveNoteV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RemoveNoteV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RemoveNoteV1RequestMultiError) AllErrors() []error { return m }
+
+// RemoveNoteV1RequestValidationError is the validation error returned by
+// RemoveNoteV1Request.Validate if the designated constraints aren't met.
+type RemoveNoteV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RemoveNoteV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RemoveNoteV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RemoveNoteV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RemoveNoteV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RemoveNoteV1RequestValidationError) ErrorName() string {
+	return "RemoveNoteV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e RemoveNoteV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRemoveNoteV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RemoveNoteV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RemoveNoteV1RequestValidationError{}
+
+// Validate checks the field values on UpdateNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *UpdateNoteV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on UpdateNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// UpdateNoteV1RequestMultiError, or nil if none found.
+func (m *UpdateNoteV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *UpdateNoteV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for UserId
+
+	// no validation rules for ClassroomId
+
+	// no validation rules for DocumentId
+
+	if len(errors) > 0 {
+		return UpdateNoteV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// UpdateNoteV1RequestMultiError is an error wrapping multiple validation
+// errors returned by UpdateNoteV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type UpdateNoteV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m UpdateNoteV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m UpdateNoteV1RequestMultiError) AllErrors() []error { return m }
+
+// UpdateNoteV1RequestValidationError is the validation error returned by
+// UpdateNoteV1Request.Validate if the designated constraints aren't met.
+type UpdateNoteV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateNoteV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateNoteV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateNoteV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateNoteV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateNoteV1RequestValidationError) ErrorName() string {
+	return "UpdateNoteV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e UpdateNoteV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateNoteV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateNoteV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateNoteV1RequestValidationError{}
+
+// Validate checks the field values on DescribeNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DescribeNoteV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeNoteV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DescribeNoteV1RequestMultiError, or nil if none found.
+func (m *DescribeNoteV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeNoteV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	if len(errors) > 0 {
+		return DescribeNoteV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// DescribeNoteV1RequestMultiError is an error wrapping multiple validation
+// errors returned by DescribeNoteV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeNoteV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeNoteV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeNoteV1RequestMultiError) AllErrors() []error { return m }
+
+// DescribeNoteV1RequestValidationError is the validation error returned by
+// DescribeNoteV1Request.Validate if the designated constraints aren't met.
+type DescribeNoteV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeNoteV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeNoteV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeNoteV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeNoteV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeNoteV1RequestValidationError) ErrorName() string {
+	return "DescribeNoteV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeNoteV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeNoteV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeNoteV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeNoteV1RequestValidationError{}
+
+// Validate checks the field values on DescribeNoteV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *DescribeNoteV1Response) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on DescribeNoteV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// DescribeNoteV1ResponseMultiError, or nil if none found.
+func (m *DescribeNoteV1Response) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *DescribeNoteV1Response) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for UserId
+
+	// no validation rules for ClassroomId
+
+	// no validation rules for DocumentId
+
+	if len(errors) > 0 {
+		return DescribeNoteV1ResponseMultiError(errors)
+	}
+	return nil
+}
+
+// DescribeNoteV1ResponseMultiError is an error wrapping multiple validation
+// errors returned by DescribeNoteV1Response.ValidateAll() if the designated
+// constraints aren't met.
+type DescribeNoteV1ResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m DescribeNoteV1ResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m DescribeNoteV1ResponseMultiError) AllErrors() []error { return m }
+
+// DescribeNoteV1ResponseValidationError is the validation error returned by
+// DescribeNoteV1Response.Validate if the designated constraints aren't met.
+type DescribeNoteV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DescribeNoteV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DescribeNoteV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DescribeNoteV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DescribeNoteV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DescribeNoteV1ResponseValidationError) ErrorName() string {
+	return "DescribeNoteV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e DescribeNoteV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDescribeNoteV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DescribeNoteV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DescribeNoteV1ResponseValidationError{}

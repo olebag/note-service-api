@@ -7,8 +7,8 @@ import (
 	pb "github.com/scipie28/note-service-api/pkg/note_v1"
 )
 
-func (n *Note) CreateNoteV1(ctx context.Context, req *pb.CreateNoteV1Request) (*pb.CreateNoteV1Response, error) {
-	id, err := n.NoteService.CreateNote(ctx, &model.Note{
+func (n *Note) AddNoteV1(ctx context.Context, req *pb.AddNoteV1Request) (*pb.AddNoteV1Response, error) {
+	id, err := n.NoteService.AddNote(ctx, &model.Note{
 		UserId:      req.GetUserId(),
 		ClassroomId: req.GetClassroomId(),
 		DocumentId:  req.GetDocumentId(),
@@ -17,5 +17,5 @@ func (n *Note) CreateNoteV1(ctx context.Context, req *pb.CreateNoteV1Request) (*
 		return nil, err
 	}
 
-	return &pb.CreateNoteV1Response{NoteId: id}, nil
+	return &pb.AddNoteV1Response{NoteId: id}, nil
 }

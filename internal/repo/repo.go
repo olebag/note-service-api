@@ -8,7 +8,6 @@ import (
 )
 
 type Repo interface {
-	Create(id, UserId, ClassroomId, DocumentId  int64) int64
 	Add(note model.Note) error
 	MultiAdd(notes []model.Note) (int64, error)
 	Update(id int64, note model.Note) error
@@ -22,14 +21,6 @@ type repo struct {
 func NewRepo() Repo {
 	return &repo{}
 }
-
-func (r *repo) Create(id, UserId, ClassroomId, DocumentId int64) int64{
-	note := model.Note{Id: id, UserId: UserId, ClassroomId: ClassroomId, DocumentId: DocumentId}
-	fmt.Printf("note was created:")
-	note.String()
-	return note.Id
-}
-
 
 func (r *repo) Add(note model.Note) error {
 	panic("implement me")

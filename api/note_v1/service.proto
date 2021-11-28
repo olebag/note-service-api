@@ -1,25 +1,66 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 package api.note_v1;
 
 option go_package = "github.com/scipie28/note-service-api/pkg/note_v1";
 
 service NoteV1 {
-  rpc CreateNoteV1(CreateNoteV1Request) returns (CreateNoteV1Response) {
+  rpc AddNoteV1(AddNoteV1Request) returns (AddNoteV1Response) {
     option (google.api.http) = {
-      post: "/note/v1"
+      post: "/note/v1/add"
     };
   }
+
+  rpc RemoveNoteV1(RemoveNoteV1Request) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/note/v1/remove"
+    };
+  }
+
+  rpc UpdateNoteV1(UpdateNoteV1Request) returns (google.protobuf.Empty){
+    option (google.api.http) = {
+      post: "/note/v1/update"
+    };
+  }
+
+  rpc DescribeNoteV1(DescribeNoteV1Request) returns (DescribeNoteV1Response){
+    option (google.api.http) = {
+      post: "/note/v1/describe"
+    };
+  }
+
 }
 
-message CreateNoteV1Request {
+message AddNoteV1Request {
   int64 user_id = 1;
   int64 classroom_id = 2;
   int64 document_id = 3;
 }
 
-message CreateNoteV1Response {
+message AddNoteV1Response {
   int64 note_id = 1;
+}
+
+message RemoveNoteV1Request{
+  int64 id = 1;
+}
+
+message UpdateNoteV1Request{
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 classroom_id = 3;
+  int64 document_id = 4;
+}
+
+message DescribeNoteV1Request{
+  int64 id = 1;
+}
+
+message DescribeNoteV1Response{
+  int64 user_id = 1;
+  int64 classroom_id = 2;
+  int64 document_id = 3;
 }
