@@ -1,0 +1,264 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "service.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/note/v1/add": {
+      "post": {
+        "operationId": "NoteV1_AddNoteV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1AddNoteV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1AddNoteV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "NoteV1"
+        ]
+      }
+    },
+    "/note/v1/describe": {
+      "post": {
+        "operationId": "NoteV1_DescribeNoteV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/note_v1DescribeNoteV1Response"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1DescribeNoteV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "NoteV1"
+        ]
+      }
+    },
+    "/note/v1/remove": {
+      "post": {
+        "operationId": "NoteV1_RemoveNoteV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1RemoveNoteV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "NoteV1"
+        ]
+      }
+    },
+    "/note/v1/update": {
+      "post": {
+        "operationId": "NoteV1_UpdateNoteV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/note_v1UpdateNoteV1Request"
+            }
+          }
+        ],
+        "tags": [
+          "NoteV1"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "note_v1AddNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "classroom_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "document_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1AddNoteV1Response": {
+      "type": "object",
+      "properties": {
+        "note_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1DescribeNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1DescribeNoteV1Response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "classroom_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "document_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1RemoveNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "note_v1UpdateNoteV1Request": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "classroom_id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "document_id": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

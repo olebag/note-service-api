@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/scipie28/note-service-api/internal/alarmer"
-	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/flusher"
 	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/stretchr/testify/require"
@@ -21,7 +21,7 @@ func TestSaver(t *testing.T) {
 		lossAllDataMode = true
 		alarmerDuration = 20 * time.Millisecond
 
-		req = []api.Note{
+		req = []model.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 			{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
@@ -131,7 +131,7 @@ func TestSaver(t *testing.T) {
 
 	//t.Run("time write in buffer less time alarmer", func(t *testing.T) {
 	//	t.Run("capacity equal one", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(2)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 	//
@@ -154,7 +154,7 @@ func TestSaver(t *testing.T) {
 	//
 	//	t.Run("capacity less slice notes len", func(t *testing.T) {
 	//		t.Run("batch size equal capacity", func(t *testing.T) {
-	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//			mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(2)
 	//
 	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 	//
@@ -176,7 +176,7 @@ func TestSaver(t *testing.T) {
 	//		})
 	//
 	//		t.Run("batch size less capacity", func(t *testing.T) {
-	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(5)
+	//			mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(5)
 	//
 	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 	//
@@ -198,7 +198,7 @@ func TestSaver(t *testing.T) {
 	//		})
 	//
 	//		t.Run("batch size more capacity", func(t *testing.T) {
-	//			mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//			mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(2)
 	//
 	//			alarmerTest, _ := alarmer.NewAlarmer(alarmerDuration)
 	//
@@ -223,7 +223,7 @@ func TestSaver(t *testing.T) {
 
 	//t.Run("capacity more slice notes len", func(t *testing.T) {
 	//	t.Run("batch size equal capacity", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(1)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
 	//
@@ -245,7 +245,7 @@ func TestSaver(t *testing.T) {
 	//	})
 	//
 	//	t.Run("batch size less capacity", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(2)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(2)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
 	//
@@ -267,7 +267,7 @@ func TestSaver(t *testing.T) {
 	//	})
 	//
 	//	t.Run("batch size more capacity", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(1)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(1)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(40 * time.Millisecond)
 	//
@@ -291,7 +291,7 @@ func TestSaver(t *testing.T) {
 
 	//t.Run("time alarmer equal time write in buffer", func(t *testing.T) {
 	//	t.Run("capacity equal one", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(8)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
 	//
@@ -313,7 +313,7 @@ func TestSaver(t *testing.T) {
 	//	})
 	//
 	//	t.Run("capacity more slice notes len", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(8)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
 	//
@@ -335,7 +335,7 @@ func TestSaver(t *testing.T) {
 	//	})
 	//
 	//	t.Run("capacity less slice notes len", func(t *testing.T) {
-	//		mockNoteRepo.EXPECT().MultiAdd(gomock.All()).Return(int64(0), nil).Times(8)
+	//		mockNoteRepo.EXPECT().MultiAddNotes(gomock.All()).Return(int64(0), nil).Times(8)
 	//
 	//		alarmerTest, _ := alarmer.NewAlarmer(10 * time.Millisecond)
 	//

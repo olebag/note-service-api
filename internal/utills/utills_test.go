@@ -3,7 +3,7 @@ package utills
 import (
 	"testing"
 
-	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/stretchr/testify/require"
 )
 
@@ -107,7 +107,7 @@ func TestFilterSlice(t *testing.T) {
 
 func TestConvertSliceToMap(t *testing.T) {
 	t.Run("input value equal nil", func(t *testing.T) {
-		expectedRes := make(map[int64]api.Note)
+		expectedRes := make(map[int64]model.Note)
 
 		res, err := ConvertSliceToMap(nil)
 		require.Nil(t, err)
@@ -115,8 +115,8 @@ func TestConvertSliceToMap(t *testing.T) {
 	})
 
 	t.Run("len input values equal zero", func(t *testing.T) {
-		req := make([]api.Note, 0)
-		expectedRes := make(map[int64]api.Note)
+		req := make([]model.Note, 0)
+		expectedRes := make(map[int64]model.Note)
 
 		res, err := ConvertSliceToMap(req)
 		require.Nil(t, err)
@@ -124,11 +124,11 @@ func TestConvertSliceToMap(t *testing.T) {
 	})
 
 	t.Run("success case", func(t *testing.T) {
-		req := []api.Note{
+		req := []model.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
-		expectedRes := map[int64]api.Note{
+		expectedRes := map[int64]model.Note{
 			1: {Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			2: {Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 		}
@@ -141,7 +141,7 @@ func TestConvertSliceToMap(t *testing.T) {
 
 func TestSplitSlice(t *testing.T) {
 	var (
-		req = []api.Note{
+		req = []model.Note{
 			{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 			{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
 			{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
@@ -159,7 +159,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("len input values equal zero ", func(t *testing.T) {
-		reqZV := make([]api.Note, 0)
+		reqZV := make([]model.Note, 0)
 		expectedError := "invalid input values"
 
 		_, err := SplitSlice(reqZV, 0)
@@ -169,7 +169,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("batch size equal 1", func(t *testing.T) {
-		expectedRes := [][]api.Note{
+		expectedRes := [][]model.Note{
 			{{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6}},
 			{{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7}},
 			{{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6}},
@@ -182,7 +182,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("the number value is a multiple of batch size", func(t *testing.T) {
-		expectedRes := [][]api.Note{
+		expectedRes := [][]model.Note{
 			{
 				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -199,7 +199,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("the number value is not a multiple of batch size", func(t *testing.T) {
-		expectedRes := [][]api.Note{
+		expectedRes := [][]model.Note{
 			{
 				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
@@ -216,7 +216,7 @@ func TestSplitSlice(t *testing.T) {
 	})
 
 	t.Run("numeric value is larger than the batch size", func(t *testing.T) {
-		expectedRes := [][]api.Note{
+		expectedRes := [][]model.Note{
 			{
 				{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
 				{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},

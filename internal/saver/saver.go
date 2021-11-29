@@ -7,13 +7,13 @@ import (
 	"log"
 
 	"github.com/scipie28/note-service-api/internal/alarmer"
-	"github.com/scipie28/note-service-api/internal/app/api"
+	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/flusher"
 )
 
 // Saver ...
 type Saver interface {
-	Save(note api.Note) error
+	Save(note model.Note) error
 	Init() error
 	Close()
 }
@@ -23,8 +23,8 @@ type saver struct {
 	batchSize   int64
 	flusher     flusher.Flusher
 	alarmer     alarmer.Alarmer
-	notes       []api.Note
-	notesChan   chan api.Note
+	notes       []model.Note
+	notesChan   chan model.Note
 	end         chan struct{}
 	lossAllData bool
 	isInit      bool
@@ -53,8 +53,8 @@ func NewSaver(capacity, batchSize int64, flusher flusher.Flusher, alarmer alarme
 		flusher:     flusher,
 		alarmer:     alarmer,
 		lossAllData: lossAllData,
-		notes:       []api.Note{},
-		notesChan:   make(chan api.Note),
+		notes:       []model.Note{},
+		notesChan:   make(chan model.Note),
 		end:         make(chan struct{}),
 		isInit:      false,
 	}, nil
@@ -94,7 +94,7 @@ func (s *saver) Init() error {
 	return nil
 }
 
-func (s *saver) Save(note api.Note) error {
+func (s *saver) Save(note model.Note) error {
 	if !s.isInit {
 		return errors.New("failed to initializing saver")
 	}
@@ -109,7 +109,7 @@ func (s *saver) Close() {
 	s.flushData()
 }
 
-func (s *saver) saveToBuffer(note api.Note) {
+func (s *saver) saveToBuffer(note model.Note) {
 	if int64(len(s.notes)) >= s.capacity {
 		if s.lossAllData || s.capacity == 1 {
 			s.notes = s.notes[:0]
