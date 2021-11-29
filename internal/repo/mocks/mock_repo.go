@@ -35,9 +35,9 @@ func (m *MockRepo) EXPECT() *MockRepoMockRecorder {
 }
 
 // Add mocks base method.
-func (m *MockRepo) AddNtoe(arg0 api.Note) error {
+func (m *MockRepo) AddNote(arg0 api.Note) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddNtoe", arg0)
+	ret := m.ctrl.Call(m, "AddNote", arg0)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
@@ -45,7 +45,7 @@ func (m *MockRepo) AddNtoe(arg0 api.Note) error {
 // Add indicates an expected call of Add.
 func (mr *MockRepoMockRecorder) Add(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddNtoe", reflect.TypeOf((*MockRepo)(nil).AddNtoe), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddNote", reflect.TypeOf((*MockRepo)(nil).AddNote), arg0)
 }
 
 // Describe mocks base method.

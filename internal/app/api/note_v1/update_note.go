@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/scipie28/note-service-api/internal/app/model"
+	pb "github.com/scipie28/note-service-api/pkg/note_v1"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
-import pb "github.com/scipie28/note-service-api/pkg/note_v1"
 
 func (n *Note) UpdateNoteV1(ctx context.Context, req *pb.UpdateNoteV1Request) (*emptypb.Empty, error) {
 	err := n.NoteService.UpdateNote(ctx, &model.Note{

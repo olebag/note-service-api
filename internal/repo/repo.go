@@ -9,7 +9,7 @@ import (
 )
 
 type Repo interface {
-	AddNtoe(note model.Note) error
+	AddNote(note model.Note) error
 	MultiAddNotes(notes []model.Note) (int64, error)
 	UpdateNote(id int64, note model.Note) error
 	RemoveNote(id int64) error
@@ -23,28 +23,33 @@ func NewRepo() Repo {
 	return &repo{}
 }
 
-func (r *repo) AddNtoe(note model.Note) error {
+func (r *repo) AddNote(note model.Note) error {
 	fmt.Println(note)
+
 	return nil
 }
 
 func (r *repo) MultiAddNotes(notes []model.Note) (int64, error) {
 	fmt.Println(notes)
+
 	return int64(len(notes)), nil
 }
 
 func (r *repo) UpdateNote(id int64, note model.Note) error {
 	fmt.Println(note, id)
+
 	return nil
 }
 
 func (r *repo) RemoveNote(id int64) error {
 	fmt.Println(id)
+
 	return nil
 }
 
 func (r *repo) DescribeNote(id int64) (model.Note, error) {
 	fmt.Println(id)
+
 	return model.Note{
 		Id:          1,
 		UserId:      1,
