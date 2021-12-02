@@ -1,3 +1,10 @@
+.PHONY: build
+build: .build
+
+PHONY: .build
+.build:
+  CGO_ENABLED=0 GOOS=linux go build -o bin/note-service-api cmd/note_v1/main.go
+
 PHONY: generate
 generate:
 		mkdir -p pkg/note_v1
