@@ -1,6 +1,7 @@
 package saver
 
 import (
+	mocksRepo "github.com/scipie28/note-service-api/internal/app/repo/mocks"
 	"sync"
 	"testing"
 	"time"
@@ -9,7 +10,6 @@ import (
 	"github.com/scipie28/note-service-api/internal/alarmer"
 	"github.com/scipie28/note-service-api/internal/app/model"
 	"github.com/scipie28/note-service-api/internal/flusher"
-	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/stretchr/testify/require"
 )
 

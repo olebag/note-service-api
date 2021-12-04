@@ -2,6 +2,7 @@ package note
 
 import (
 	"context"
+	"github.com/scipie28/note-service-api/internal/app/repo"
 
 	"github.com/scipie28/note-service-api/internal/app/model"
 )
@@ -11,11 +12,16 @@ type INote interface {
 	RemoveNote(ctx context.Context, id int64) error
 	UpdateNote(ctx context.Context, note *model.Note) error
 	DescribeNote(ctx context.Context, id int64) (*model.Note, error)
+	MultiAddNotes(ctx context.Context, notes []*model.Note) error
+	ListNotes(ctx context.Context) ([]*model.Note, error)
 }
 
 type note struct {
+	noteRepo repo.Repo
 }
 
-func NewNote() INote {
-	return &note{}
+func NewNote(noteRepo repo.Repo) INote {
+	return &note{
+		noteRepo: noteRepo,
+	}
 }

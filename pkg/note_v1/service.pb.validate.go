@@ -666,3 +666,378 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = DescribeNoteV1ResponseValidationError{}
+
+// Validate checks the field values on Notes with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Notes) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Notes with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in NotesMultiError, or nil if none found.
+func (m *Notes) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Notes) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Id
+
+	// no validation rules for UserId
+
+	// no validation rules for ClassroomId
+
+	// no validation rules for DocumentId
+
+	if len(errors) > 0 {
+		return NotesMultiError(errors)
+	}
+	return nil
+}
+
+// NotesMultiError is an error wrapping multiple validation errors returned by
+// Notes.ValidateAll() if the designated constraints aren't met.
+type NotesMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m NotesMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m NotesMultiError) AllErrors() []error { return m }
+
+// NotesValidationError is the validation error returned by Notes.Validate if
+// the designated constraints aren't met.
+type NotesValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e NotesValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e NotesValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e NotesValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e NotesValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e NotesValidationError) ErrorName() string { return "NotesValidationError" }
+
+// Error satisfies the builtin error interface
+func (e NotesValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sNotes.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = NotesValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = NotesValidationError{}
+
+// Validate checks the field values on MultiAddNotesV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *MultiAddNotesV1Request) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on MultiAddNotesV1Request with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// MultiAddNotesV1RequestMultiError, or nil if none found.
+func (m *MultiAddNotesV1Request) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *MultiAddNotesV1Request) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetNotes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, MultiAddNotesV1RequestValidationError{
+						field:  fmt.Sprintf("Notes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, MultiAddNotesV1RequestValidationError{
+						field:  fmt.Sprintf("Notes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return MultiAddNotesV1RequestValidationError{
+					field:  fmt.Sprintf("Notes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return MultiAddNotesV1RequestMultiError(errors)
+	}
+	return nil
+}
+
+// MultiAddNotesV1RequestMultiError is an error wrapping multiple validation
+// errors returned by MultiAddNotesV1Request.ValidateAll() if the designated
+// constraints aren't met.
+type MultiAddNotesV1RequestMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m MultiAddNotesV1RequestMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m MultiAddNotesV1RequestMultiError) AllErrors() []error { return m }
+
+// MultiAddNotesV1RequestValidationError is the validation error returned by
+// MultiAddNotesV1Request.Validate if the designated constraints aren't met.
+type MultiAddNotesV1RequestValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e MultiAddNotesV1RequestValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e MultiAddNotesV1RequestValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e MultiAddNotesV1RequestValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e MultiAddNotesV1RequestValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e MultiAddNotesV1RequestValidationError) ErrorName() string {
+	return "MultiAddNotesV1RequestValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e MultiAddNotesV1RequestValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sMultiAddNotesV1Request.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = MultiAddNotesV1RequestValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = MultiAddNotesV1RequestValidationError{}
+
+// Validate checks the field values on ListNotesV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the first error encountered is returned, or nil if there are no violations.
+func (m *ListNotesV1Response) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on ListNotesV1Response with the rules
+// defined in the proto definition for this message. If any rules are
+// violated, the result is a list of violation errors wrapped in
+// ListNotesV1ResponseMultiError, or nil if none found.
+func (m *ListNotesV1Response) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *ListNotesV1Response) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	for idx, item := range m.GetNotes() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListNotesV1ResponseValidationError{
+						field:  fmt.Sprintf("Notes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListNotesV1ResponseValidationError{
+						field:  fmt.Sprintf("Notes[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			}
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
+			if err := v.Validate(); err != nil {
+				return ListNotesV1ResponseValidationError{
+					field:  fmt.Sprintf("Notes[%v]", idx),
+					reason: "embedded message failed validation",
+					cause:  err,
+				}
+			}
+		}
+
+	}
+
+	if len(errors) > 0 {
+		return ListNotesV1ResponseMultiError(errors)
+	}
+	return nil
+}
+
+// ListNotesV1ResponseMultiError is an error wrapping multiple validation
+// errors returned by ListNotesV1Response.ValidateAll() if the designated
+// constraints aren't met.
+type ListNotesV1ResponseMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m ListNotesV1ResponseMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m ListNotesV1ResponseMultiError) AllErrors() []error { return m }
+
+// ListNotesV1ResponseValidationError is the validation error returned by
+// ListNotesV1Response.Validate if the designated constraints aren't met.
+type ListNotesV1ResponseValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e ListNotesV1ResponseValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e ListNotesV1ResponseValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e ListNotesV1ResponseValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e ListNotesV1ResponseValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e ListNotesV1ResponseValidationError) ErrorName() string {
+	return "ListNotesV1ResponseValidationError"
+}
+
+// Error satisfies the builtin error interface
+func (e ListNotesV1ResponseValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sListNotesV1Response.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = ListNotesV1ResponseValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = ListNotesV1ResponseValidationError{}

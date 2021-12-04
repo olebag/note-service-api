@@ -1,11 +1,11 @@
 package flusher
 
 import (
+	mocksRepo "github.com/scipie28/note-service-api/internal/app/repo/mocks"
 	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/scipie28/note-service-api/internal/app/model"
-	mocksRepo "github.com/scipie28/note-service-api/internal/repo/mocks"
 	"github.com/stretchr/testify/require"
 )
 
