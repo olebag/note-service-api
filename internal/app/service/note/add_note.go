@@ -7,7 +7,5 @@ import (
 )
 
 func (n *note) AddNote(ctx context.Context, note *model.Note) (int64, error) {
-	note.String()
-
-	return 1, nil
+	return n.noteRepo.AddNote(ctx, note)
 }

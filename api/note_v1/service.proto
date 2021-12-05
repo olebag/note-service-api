@@ -36,6 +36,19 @@ service NoteV1 {
     };
   }
 
+  rpc MultiAddNotesV1(MultiAddNotesV1Request) returns (MultiAddNotesV1Response){
+    option (google.api.http) = {
+      post: "/note/v1/multiadd"
+      body: "*"
+    };
+  }
+
+  rpc ListNotesV1(google.protobuf.Empty) returns (ListNotesV1Response){
+    option (google.api.http) = {
+      post: "/note/v1/list"
+      body: "*"
+    };
+  }
 }
 
 message AddNoteV1Request {
@@ -68,4 +81,23 @@ message DescribeNoteV1Response{
   int64 user_id = 2;
   int64 classroom_id = 3;
   int64 document_id = 4;
+}
+
+message Notes{
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 classroom_id = 3;
+  int64 document_id = 4;
+}
+
+message MultiAddNotesV1Request{
+  repeated Notes notes = 1;
+}
+
+message MultiAddNotesV1Response{
+  int64 id = 1;
+}
+
+message ListNotesV1Response{
+  repeated Notes notes = 1;
 }

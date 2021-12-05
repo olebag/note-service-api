@@ -1,10 +1,10 @@
 package flusher
 
 import (
+	"github.com/scipie28/note-service-api/internal/app/repo"
 	"log"
 
 	"github.com/scipie28/note-service-api/internal/app/model"
-	"github.com/scipie28/note-service-api/internal/repo"
 	"github.com/scipie28/note-service-api/internal/utills"
 )
 

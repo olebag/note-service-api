@@ -23,6 +23,8 @@ type NoteV1Client interface {
 	RemoveNoteV1(ctx context.Context, in *RemoveNoteV1Request, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	UpdateNoteV1(ctx context.Context, in *UpdateNoteV1Request, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	DescribeNoteV1(ctx context.Context, in *DescribeNoteV1Request, opts ...grpc.CallOption) (*DescribeNoteV1Response, error)
+	MultiAddNotesV1(ctx context.Context, in *MultiAddNotesV1Request, opts ...grpc.CallOption) (*MultiAddNotesV1Response, error)
+	ListNotesV1(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListNotesV1Response, error)
 }
 
 type noteV1Client struct {
@@ -69,6 +71,24 @@ func (c *noteV1Client) DescribeNoteV1(ctx context.Context, in *DescribeNoteV1Req
 	return out, nil
 }
 
+func (c *noteV1Client) MultiAddNotesV1(ctx context.Context, in *MultiAddNotesV1Request, opts ...grpc.CallOption) (*MultiAddNotesV1Response, error) {
+	out := new(MultiAddNotesV1Response)
+	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/MultiAddNotesV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *noteV1Client) ListNotesV1(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListNotesV1Response, error) {
+	out := new(ListNotesV1Response)
+	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/ListNotesV1", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NoteV1Server is the server API for NoteV1 service.
 // All implementations must embed UnimplementedNoteV1Server
 // for forward compatibility
@@ -77,6 +97,8 @@ type NoteV1Server interface {
 	RemoveNoteV1(context.Context, *RemoveNoteV1Request) (*emptypb.Empty, error)
 	UpdateNoteV1(context.Context, *UpdateNoteV1Request) (*emptypb.Empty, error)
 	DescribeNoteV1(context.Context, *DescribeNoteV1Request) (*DescribeNoteV1Response, error)
+	MultiAddNotesV1(context.Context, *MultiAddNotesV1Request) (*MultiAddNotesV1Response, error)
+	ListNotesV1(context.Context, *emptypb.Empty) (*ListNotesV1Response, error)
 	mustEmbedUnimplementedNoteV1Server()
 }
 
@@ -95,6 +117,12 @@ func (UnimplementedNoteV1Server) UpdateNoteV1(context.Context, *UpdateNoteV1Requ
 }
 func (UnimplementedNoteV1Server) DescribeNoteV1(context.Context, *DescribeNoteV1Request) (*DescribeNoteV1Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DescribeNoteV1 not implemented")
+}
+func (UnimplementedNoteV1Server) MultiAddNotesV1(context.Context, *MultiAddNotesV1Request) (*MultiAddNotesV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MultiAddNotesV1 not implemented")
+}
+func (UnimplementedNoteV1Server) ListNotesV1(context.Context, *emptypb.Empty) (*ListNotesV1Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListNotesV1 not implemented")
 }
 func (UnimplementedNoteV1Server) mustEmbedUnimplementedNoteV1Server() {}
 
@@ -181,6 +209,42 @@ func _NoteV1_DescribeNoteV1_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NoteV1_MultiAddNotesV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MultiAddNotesV1Request)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoteV1Server).MultiAddNotesV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.note_v1.NoteV1/MultiAddNotesV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoteV1Server).MultiAddNotesV1(ctx, req.(*MultiAddNotesV1Request))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _NoteV1_ListNotesV1_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoteV1Server).ListNotesV1(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.note_v1.NoteV1/ListNotesV1",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoteV1Server).ListNotesV1(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NoteV1_ServiceDesc is the grpc.ServiceDesc for NoteV1 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -203,6 +267,14 @@ var NoteV1_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DescribeNoteV1",
 			Handler:    _NoteV1_DescribeNoteV1_Handler,
+		},
+		{
+			MethodName: "MultiAddNotesV1",
+			Handler:    _NoteV1_MultiAddNotesV1_Handler,
+		},
+		{
+			MethodName: "ListNotesV1",
+			Handler:    _NoteV1_ListNotesV1_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
