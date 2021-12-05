@@ -6,10 +6,6 @@ import (
 	"github.com/scipie28/note-service-api/internal/app/model"
 )
 
-func (n *note) MultiAddNotes(ctx context.Context, notes []*model.Note) error {
-	for _, nt := range notes {
-		nt.String()
-	}
-
-	return nil
+func (n *note) MultiAddNotes(ctx context.Context, notes []*model.Note) (int64, error) {
+	return n.noteRepo.MultiAddNotes(ctx, notes)
 }

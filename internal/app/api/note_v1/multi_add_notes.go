@@ -5,10 +5,9 @@ import (
 
 	"github.com/scipie28/note-service-api/internal/app/model"
 	pb "github.com/scipie28/note-service-api/pkg/note_v1"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-func (n *Note) MultiAddNotesV1(ctx context.Context, req *pb.MultiAddNotesV1Request) (*emptypb.Empty, error) {
+func (n *Note) MultiAddNotesV1(ctx context.Context, req *pb.MultiAddNotesV1Request) (*pb.MultiAddNotesV1Response, error) {
 	var notes []*model.Note
 
 	for _, note := range req.GetNotes() {
@@ -20,10 +19,10 @@ func (n *Note) MultiAddNotesV1(ctx context.Context, req *pb.MultiAddNotesV1Reque
 		})
 	}
 
-	err := n.NoteService.MultiAddNotes(ctx, notes)
+	res, err := n.NoteService.MultiAddNotes(ctx, notes)
 	if err != nil {
 		return nil, err
 	}
 
-	return &emptypb.Empty{}, nil
+	return &pb.MultiAddNotesV1Response{Id: res}, nil
 }

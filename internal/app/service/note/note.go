@@ -2,9 +2,9 @@ package note
 
 import (
 	"context"
-	"github.com/scipie28/note-service-api/internal/app/repo"
 
 	"github.com/scipie28/note-service-api/internal/app/model"
+	"github.com/scipie28/note-service-api/internal/app/repo"
 )
 
 type INote interface {
@@ -12,7 +12,7 @@ type INote interface {
 	RemoveNote(ctx context.Context, id int64) error
 	UpdateNote(ctx context.Context, note *model.Note) error
 	DescribeNote(ctx context.Context, id int64) (*model.Note, error)
-	MultiAddNotes(ctx context.Context, notes []*model.Note) error
+	MultiAddNotes(ctx context.Context, notes []*model.Note) (int64, error)
 	ListNotes(ctx context.Context) ([]*model.Note, error)
 }
 

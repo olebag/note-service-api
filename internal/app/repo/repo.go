@@ -4,22 +4,27 @@ package repo
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
+	"log"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
 	"github.com/scipie28/note-service-api/internal/app/model"
 )
 
-const tableName = "notes"
+const (
+	limit     = 10
+	tableName = "notes"
+)
 
 type Repo interface {
 	AddNote(ctx context.Context, note *model.Note) (int64, error)
-	MultiAddNotes(notes []model.Note) (int64, error)
-	UpdateNote(id int64, note model.Note) error
-	RemoveNote(id int64) error
-	DescribeNote(id int64) (model.Note, error)
-	ListNotes() ([]*model.Note, error)
+	MultiAddNotes(ctx context.Context, notes []*model.Note) (int64, error)
+	UpdateNote(ctx context.Context, id int64, note *model.Note) error
+	RemoveNote(ctx context.Context, id int64) error
+	DescribeNote(ctx context.Context, id int64) (*model.Note, error)
+	ListNotes(ctx context.Context) ([]*model.Note, error)
 }
 
 type repo struct {
@@ -51,44 +56,113 @@ func (r *repo) AddNote(ctx context.Context, note *model.Note) (int64, error) {
 	return note.Id, nil
 }
 
-func (r *repo) MultiAddNotes(notes []model.Note) (int64, error) {
-	fmt.Println(notes)
+func (r *repo) MultiAddNotes(ctx context.Context, notes []*model.Note) (int64, error) {
+	var num int64
+	q := sq.Insert(tableName).
+		Columns("user_id", "classroom_id", "document_id").
+		RunWith(r.db).PlaceholderFormat(sq.Dollar)
 
-	return int64(len(notes)), nil
-}
-
-func (r *repo) UpdateNote(id int64, note model.Note) error {
-	fmt.Println(note, id)
-
-	return nil
-}
-
-func (r *repo) RemoveNote(id int64) error {
-	fmt.Println(id)
-
-	return nil
-}
-
-func (r *repo) DescribeNote(id int64) (model.Note, error) {
-	fmt.Println(id)
-
-	return model.Note{
-		Id:          1,
-		UserId:      1,
-		ClassroomId: 0,
-		DocumentId:  0,
-	}, nil
-}
-
-func (r *repo) ListNotes() ([]*model.Note, error) {
-	data := []*model.Note{
-		{Id: 1, UserId: 1, ClassroomId: 23, DocumentId: 6},
-		{Id: 2, UserId: 2, ClassroomId: 24, DocumentId: 7},
-		{Id: 3, UserId: 3, ClassroomId: 23, DocumentId: 6},
-		{Id: 4, UserId: 4, ClassroomId: 24, DocumentId: 7},
-		{Id: 5, UserId: 5, ClassroomId: 23, DocumentId: 6},
-		{Id: 555, UserId: 6, ClassroomId: 24, DocumentId: 7},
+	for _, note := range notes {
+		q = q.Values(note.UserId, note.ClassroomId, note.DocumentId)
+		num++
 	}
 
-	return data, nil
+	_, err := q.ExecContext(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	return num, nil
+}
+
+func (r *repo) UpdateNote(ctx context.Context, id int64, note *model.Note) error {
+	q := sq.Update(tableName).SetMap(map[string]interface{}{
+		"user_id":      note.UserId,
+		"classroom_id": note.ClassroomId,
+		"document_id":  note.DocumentId,
+	}).
+		Where(sq.Eq{"id": id}).
+		RunWith(r.db).
+		PlaceholderFormat(sq.Dollar)
+
+	_, err := q.ExecContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) RemoveNote(ctx context.Context, id int64) error {
+	q := sq.Delete(tableName).
+		Where(sq.Eq{"id": id}).
+		RunWith(r.db).
+		PlaceholderFormat(sq.Dollar)
+
+	_, err := q.ExecContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *repo) DescribeNote(ctx context.Context, id int64) (*model.Note, error) {
+	var note model.Note
+	q := sq.Select("user_id", "classroom_id", "document_id").
+		From(tableName).
+		Where(sq.Eq{"id": id}).
+		RunWith(r.db).
+		PlaceholderFormat(sq.Dollar)
+
+	err := q.QueryRowContext(ctx).
+		Scan(&note.UserId, &note.ClassroomId, &note.DocumentId)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &note, nil
+}
+
+func (r *repo) ListNotes(ctx context.Context) ([]*model.Note, error) {
+	var res []*model.Note
+	q := sq.Select("id", "user_id", "classroom_id", "document_id").
+		From(tableName).
+		RunWith(r.db).
+		Limit(limit).
+		Offset(1).
+		PlaceholderFormat(sq.Dollar)
+
+	rows, err := q.QueryContext(ctx)
+	defer func(rows *sql.Rows) {
+		err = rows.Close()
+		if err != nil {
+			log.Fatalf("failed to closing rows: %s", err.Error())
+		}
+	}(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var id, userId, classroomId, documentId int64
+
+		if err = rows.Scan(&id, &userId, &classroomId, &documentId); err != nil {
+			return nil, err
+		}
+
+		res = append(res, &model.Note{
+			Id:          id,
+			UserId:      userId,
+			ClassroomId: classroomId,
+			DocumentId:  documentId,
+		})
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
